@@ -35,7 +35,7 @@ window.addEventListener("load", function () {
     // Add a visible delay before showing the response
     setTimeout(function () {
       feedback.innerHTML += 
-      "<table><tr><th>Data</th></tr><tr><td>"+json.NMI+"</td></tr><tr><td>"+json.Distributor+"</td></tr><tr><td><a href=\""+json.OutageLink+"\"></td></tr><tr><td>"+json.StateTerritory+"</a></td></tr></table>";
+      "<table><tr><th>Data</th></tr><tr><td>"+json.NMI+"</td></tr><tr><td>"+json.Distributor+"</td></tr><tr><td><a href=\""+json.OutageLink+">"+json.OutageLink+"</a></td></tr><tr><td>"+json.StateTerritory+"</a></td></tr></table>";
       feedback.style.display = "block";
     }, 900);
   }
