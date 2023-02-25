@@ -35,7 +35,7 @@ window.addEventListener("load", function () {
     console.log(json.nmi);
     // Add a visible delay before showing the response
     setTimeout(function () {
-      feedback.textContent = json;
+      feedback.textContent = json.NMI;
       feedback.style.display = "block";
     }, 900);
   }
