@@ -23,7 +23,6 @@ window.addEventListener("load", function () {
   
     let headers = new Headers({
       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      'Access-Control-Allow-Origin': 'https://findmyauspowerdisty.com'
     });
   
     let params = {
@@ -36,7 +35,7 @@ window.addEventListener("load", function () {
   
     // Add a visible delay before showing the response
     setTimeout(function () {
-      feedback.textContent = json;
+      feedback.textContent = json.nmi;
       feedback.style.display = "block";
     }, 900);
   }
