@@ -6,7 +6,7 @@ window.addEventListener("load", function () {
   
         let nmi = document.getElementById("input_nmi").value;
         let feedback = document.getElementById("response");
-  
+        console.log(nmi);
         submitNMI(nmi, feedback);
   
         return false;
