@@ -6,7 +6,7 @@ window.addEventListener("load", function () {
   
         let nmi = document.getElementById("input_nmi").value;
         let feedback = document.getElementById("response");
-        console.log(nmi);
+
         submitNMI(nmi, feedback);
   
         return false;
@@ -32,7 +32,7 @@ window.addEventListener("load", function () {
   
     let response = await fetch(url, params);
     let json = await response.json();
-  
+    console.log(json.nmi);
     // Add a visible delay before showing the response
     setTimeout(function () {
       feedback.textContent = json.nmi;
