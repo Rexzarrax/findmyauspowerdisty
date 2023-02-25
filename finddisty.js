@@ -32,10 +32,10 @@ window.addEventListener("load", function () {
   
     let response = await fetch(url, params);
     let json = await response.json();
-    console.log(json.nmi);
     // Add a visible delay before showing the response
     setTimeout(function () {
-      feedback.textContent = json.NMI;
+      feedback.textContent = json.NMI+"\n"+json.Distributor+"\n"+
+      json.OutageLink+"\n"+json.StateTerritory;
       feedback.style.display = "block";
     }, 900);
   }
