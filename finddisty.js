@@ -15,7 +15,7 @@ window.addEventListener("load", function () {
   
   async function submitNMI(nmi, feedback) {
     // Hide the existing response
-    feedback.innerHTML == "<p>Loading...</p>"
+    feedback.innerHTML += "<p>Loading...</p>"
     //feedback.style.display = "none";
   
     let url = `https://api.findmyauspowerdisty.com/find?input_nmi=${encodeURIComponent(
