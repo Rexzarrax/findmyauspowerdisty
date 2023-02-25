@@ -23,6 +23,7 @@ window.addEventListener("load", function () {
   
     let headers = new Headers({
       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      'Access-Control-Allow-Origin': 'https://findmyauspowerdisty.com'
     });
   
     let params = {
