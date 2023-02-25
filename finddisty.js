@@ -34,7 +34,7 @@ window.addEventListener("load", function () {
     let json = await response.json();
     // Add a visible delay before showing the response
     setTimeout(function () {
-      feedback.textContent = 
+      feedback.innerHTML += 
       "<table><tr><th>Data</th></tr><tr><td>"+json.NMI+"</td></tr><tr><td>"+json.Distributor+"</td></tr><tr><td><a href=\""+json.OutageLink+"\"></td></tr><tr><td>"+json.StateTerritory+"</a></td></tr></table>";
       feedback.style.display = "block";
     }, 900);
