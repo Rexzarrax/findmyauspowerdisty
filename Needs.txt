@@ -1,4 +1,0 @@
-- favicon
-- Logo
-- css file
-- link back to api
