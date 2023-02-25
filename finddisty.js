@@ -17,7 +17,7 @@ window.addEventListener("load", function () {
     // Hide the existing response
     feedback.style.display = "none";
   
-    let url = `https://api.findmyauspowerdisty.com/finder?input_nmi=${encodeURIComponent(
+    let url = `https://api.findmyauspowerdisty.com/find?input_nmi=${encodeURIComponent(
       nmi
     )}`;
   
