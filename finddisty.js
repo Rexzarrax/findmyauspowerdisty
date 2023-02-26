@@ -38,10 +38,10 @@ window.addEventListener("load", function () {
           feedback.innerHTML =
           "<table><tr><td>Searched NMI</td><td>"+json.NMI+"</td></tr><tr><td>Distributor</td><td>"+json.Distributor+"</td></tr><tr><td>Outage Page</td><td><a href=\""+json.OutageLink+"\">"+json.OutageLink+"</a></td></tr><tr><td>State</td><td>"+json.StateTerritory+"</a></td></tr></table>";
           feedback.style.display = "block";
-        }, 450);
+        }, 800);
     }
     catch (e){
-        feedback.innerHTML = "An Error Occured."
+        feedback.innerHTML = "An Error Occured." + e;
     }
 
   }
