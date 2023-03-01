@@ -10,33 +10,39 @@
   </head>
 
   <body>
-    <header>
+    <div class="header">
         <img src="logo.jpg" alt="Find My Aussie Power Distributor" />
-    </header>
+    </div>
     <hr>
-  <p>Please enter your NMI below, Usually the first 4-6 digits should do. It can be found on your most recent Bill.</p>
-    <section id="search">
-        <form id="findDistyForm">
-          <input
-            maxlength="10"
-            autocapitalize="off"
-            autocorrect="off"
-            id="input_nmi"
-            name="input_nmi"
-            placeholder="enter nmi"
-            spellcheck="false"
-            type="string"
-          />
-          <button type="submit">Search</button>
-          <hr>
-          <div id="feedbackresponse"></div>
-        </form>
-      </section>
-    <footer>
+    <div class="row">
+        <div class="column_side"></div>
+        <div class="column_mid">
+            <p>Please enter your NMI below, Usually the first 4-6 digits should do. It can be found on your most recent Bill.</p>
+            <section id="search">
+                <form id="findDistyForm">
+                    <input
+                    maxlength="10"
+                    autocapitalize="off"
+                    autocorrect="off"
+                    id="input_nmi"
+                    name="input_nmi"
+                    placeholder="enter nmi"
+                    spellcheck="false"
+                    type="string"/>
+                    <button type="submit">Search</button>
+                    <hr>
+                    <div id="feedbackresponse"></div>
+                </form>
+            </section>
+        </div>
+        <div class="column_side"></div>
+    </div>
+  
+    <div class ="footer">
         <p>*Note: Partial support for NMI's starting with Letters e.g QAAAxxxxxx</p>
         <p>Based on Version 13(Nov 2022) of the <a href="https://www.aemo.com.au/-/media/Files/Electricity/NEM/Retail_and_Metering/Metering-Procedures/NMI-Allocation-List.pdf">NMI Allocation list</a></p>
             <br>
         <p> Developed by Jards at <a href="https://jardsit.net/">jardsit.net</a> </p>
-    </footer>
+    </div>
   </body>
   </html>
