@@ -1,15 +1,63 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="finddisty.js"></script>
-    <link rel="stylesheet" href="style.css"> 
-    <title>findmyauspowerdisty</title>
-  </head>
+    <script>
+        window.addEventListener("load", function () {
+            document
+                .getElementById("findDistyForm")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
 
-  <body>
+                    let nmi = document.getElementById("input_nmi").value;
+                    let feedback = document.getElementById("feedbackresponse");
+
+                    submitNMI(nmi, feedback);
+
+                    return false;
+                });
+        });
+
+        async function submitNMI(nmi, feedback) {
+            // Hide the existing response
+            feedback.innerHTML += "<p>Loading...</p>"
+            //feedback.style.display = "none";
+
+            let url = `https://api.findmyauspowerdisty.com/find?input_nmi=${encodeURIComponent(
+                nmi
+            )}`;
+
+            let headers = new Headers({
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            });
+
+            let params = {
+                headers,
+                mode: "cors",
+            };
+            try {
+                let response = await fetch(url, params);
+                let json = await response.json();
+                // Add a visible delay before showing the response
+                setTimeout(function () {
+                    feedback.innerHTML =
+                        "<table><tr><td>Searched NMI</td><td>" + json.NMI + "</td></tr><tr><td>Distributor</td><td>" + json.Distributor + "</td></tr><tr><td>Outage Page</td><td><a href=\"" + json.OutageLink + "\">" + json.OutageLink + "</a></td></tr><tr><td>State</td><td>" + json.StateTerritory + "</a></td></tr></table>";
+                    feedback.style.display = "block";
+                }, 800);
+            }
+            catch (e) {
+                feedback.innerHTML = "An Error Occured." + e;
+            }
+
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <title>findmyauspowerdisty</title>
+</head>
+
+<body>
     <div class="header">
         <img src="logo.jpg" alt="Find My Aussie Power Distributor" />
     </div>
@@ -17,32 +65,30 @@
     <div class="row">
         <div class="column_side"></div>
         <div class="column_mid">
-            <p>Please enter your NMI below, Usually the first 4-6 digits should do. It can be found on your most recent Bill.</p>
+            <p>Please enter your NMI below, usually the first 4-6 digits should do. It can be found on your most recent
+                bill.</p>
             <section id="search">
                 <form id="findDistyForm">
-                    <input
-                    maxlength="10"
-                    autocapitalize="off"
-                    autocorrect="off"
-                    id="input_nmi"
-                    name="input_nmi"
-                    placeholder="enter nmi"
-                    spellcheck="false"
-                    type="string"/>
+                    <input maxlength="10" autocapitalize="on" autocorrect="off" id="input_nmi" name="input_nmi"
+                        placeholder="enter nmi" spellcheck="false" type="string" />
                     <button type="submit">Search</button>
-                    <hr>
+
                     <div id="feedbackresponse"></div>
                 </form>
             </section>
         </div>
         <div class="column_side"></div>
     </div>
-  
-    <div class ="footer">
-        <p>*Note: Partial support for NMI's starting with Letters e.g QAAAxxxxxx</p>
-        <p>Based on Version 13(Nov 2022) of the <a href="https://www.aemo.com.au/-/media/Files/Electricity/NEM/Retail_and_Metering/Metering-Procedures/NMI-Allocation-List.pdf">NMI Allocation list</a></p>
-            <br>
-        <p> Developed by Jards at <a href="https://jardsit.net/">jardsit.net</a> </p>
+
+    <div class="footer">
+        <hr>
+        <p>*Note: No support for NMI's starting with letters e.g NCCCxxxxxx</p>
+        <p>Based on version 13(Nov 2022) of the <a
+                href="https://www.aemo.com.au/-/media/Files/Electricity/NEM/Retail_and_Metering/Metering-Procedures/NMI-Allocation-List.pdf">NMI
+                Allocation list</a></p>
+        <br>
+        <p> Developed by Jards from <a href="https://jardsit.net/">jardsit.net</a> </p>
     </div>
-  </body>
-  </html>
+</body>
+
+</html>
