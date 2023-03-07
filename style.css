@@ -27,6 +27,12 @@
     }
   }
 
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
   .footer {
     background-color: #5a5a5a;
     text-align: center;
