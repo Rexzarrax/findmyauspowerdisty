@@ -4,6 +4,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <noscript>
+        <style type="text/css">
+            .pagecontainer {display:none;}
+        </style>
+        <div class="noscriptmsg">
+        Looks like you don't have javascript enabled. For this page to work it requires Javascript.
+        </div>
+    </noscript>
+    
     <script>
         window.addEventListener("load", function () {
             document
@@ -62,24 +71,25 @@
         <img src="logo.jpg" alt="Find My Aussie Power Distributor" />
     </div>
     <hr>
-    <div class="row">
-        <div class="column_side"></div>
-        <div class="column_mid">
-            <p>Please enter your NMI below, usually the first 4-6 digits should do. It can be found on your most recent
-                bill.</p>
-            <section id="search">
-                <form id="findDistyForm">
-                    <input maxlength="10" autocapitalize="on" autocorrect="off" id="input_nmi" name="input_nmi"
-                        placeholder="enter nmi" spellcheck="false" type="string" />
-                    <button type="submit">Search</button>
+    <div class="pagecontainer"></div>
+        <div class="row">
+            <div class="column_side"></div>
+            <div class="column_mid">
+                <p>Please enter your NMI below, usually the first 4-6 digits should do. It can be found on your most recent
+                    bill.</p>
+                <section id="search">
+                    <form id="findDistyForm">
+                        <input maxlength="10" autocapitalize="on" autocorrect="off" id="input_nmi" name="input_nmi"
+                            placeholder="enter nmi" spellcheck="false" type="string" />
+                        <button type="submit">Search</button>
 
-                    <div id="feedbackresponse"></div>
-                </form>
-            </section>
+                        <div id="feedbackresponse"></div>
+                    </form>
+                </section>
+            </div>
+            <div class="column_side"></div>
         </div>
-        <div class="column_side"></div>
     </div>
-
     <div class="footer">
         <hr>
         <p>*Note: No support for NMI's starting with letters e.g NCCCxxxxxx</p>
