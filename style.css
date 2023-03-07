@@ -1,21 +1,21 @@
 .header {
-    background-color: #F1F1F1;
+    background-color: #5a5a5a;
     text-align: center;
     padding: 20px;
   }
 
    /* Create three equal columns that float next to each other */
-   .column {
+  .column {
     float: left;
   }
   
   /* Left and right column */
-  .column.side {
+  .column_side {
     width: 25%;
   }
   
   /* Middle column */
-  .column.middle {
+  .column_mid {
     width: 50%;
   }
   
@@ -27,7 +27,7 @@
   }
 
   .footer {
-    background-color: #F1F1F1;
+    background-color: #5a5a5a;
     text-align: center;
     padding: 10px;
   }
