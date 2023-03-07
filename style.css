@@ -2,8 +2,14 @@
     background-color: #c9c9c9;
     text-align: center;
     padding: 20px;
+    margin: 10px;
   }
 
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
    /* Create three equal columns that float next to each other */
   .column {
     float: left;
@@ -12,13 +18,59 @@
   
   /* Left and right column */
   .left, .right {
-    width: 25%;
+    width: 30%;
   }
   
   /* Middle column */
   .middle {
-    width: 60%;
+    width: 40%;
   }
+
+  table, td, th { 
+    padding: 1%;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 90%;
+  }
+  
+  th, td {
+    padding: 10px;
+  }
+
+input[type=string] {
+  background-color: white;
+  /*background-image: url('searchicon.png');*/
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 70%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+} 
+
+input[type=string]:focus {
+  background-color: lightblue;
+}
+
+button[type=submit]{
+  background-color: #9c9c9c;
+  border: none;
+  color: white;
+  padding: 14px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 19%;
+}
+
+button[type=submit]:hover{
+  background-color: #5c5c5c;
+}
+
   
   /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
   @media screen and (max-width: 600px) {
@@ -27,14 +79,12 @@
     }
   }
 
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
   .footer {
     background-color: #c9c9c9;
     text-align: center;
     padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin: 10px;
   }
