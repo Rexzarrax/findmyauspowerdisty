@@ -61,8 +61,10 @@
 
 <body>
     <div class="header">
-        <img id="Header-logo" src="./images/logo-findmyauspowerdisty.png" alt="FMAPD Logo" width="10%" height="10%"/>
-        <p id="title">Find My Aussie Power Distributor</p>
+        <img style="display: inline" id="Header-logo" src="./images/logo-findmyauspowerdisty.png" alt="FMAPD Logo" width="10%" height="10%"/>
+        <div style="display: inline">
+            <p id="title">Find My Aussie Power Disty</p>
+        </div>
     </div>
     <hr>
 
@@ -79,12 +81,12 @@
         <div class="row">
             <div class="column left"></div>
             <div class="column middle">
-                <p>Please enter your NMI below, usually the first 4-6 digits should do. It can be found on your most recent
-                    bill.</p>
+                <p style="text-align: center;">Please enter your NMI below, It can be found on your most recent
+                    utility bill. It should be a total of 10 numbers. Usually, only the first 6 need to be entered to find your distributor.</p>
                 <div id="search">
                     <form id="findDistyForm">
                         <input maxlength="10" autocapitalize="on" autocorrect="off" id="input_nmi" name="input_nmi"
-                            placeholder="enter nmi" spellcheck="false" type="string" />
+                            placeholder="Enter NMI" spellcheck="false" type="string" />
                         <button type="submit">Search</button>
 
                         <div id="feedbackresponse"></div>

@@ -45,6 +45,8 @@
   #title {
     font-size: 150%;
     font: "Times New Roman";
+    text-align: center;
+    display: inline-flexbox;
   }
 input[type=string] {
   background-color: white;
