@@ -5,6 +5,7 @@
     margin: 10px;
   }
 
+
   .row:after {
     content: "";
     display: table;
@@ -41,6 +42,10 @@
     padding: 10px;
   }
 
+  #title {
+    font-size: 150%;
+    font: "Times New Roman";
+  }
 input[type=string] {
   background-color: white;
   /*background-image: url('searchicon.png');*/
@@ -82,9 +87,7 @@ button[type=submit]:hover{
   .footer {
     background-color: #c9c9c9;
     text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+    padding: 20px;
     margin: 10px;
+    position:relative;
   }
