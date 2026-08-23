@@ -9,10 +9,22 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     <style>
-        #searchBar { display: flex; gap: 8px; margin: 14px auto; flex-wrap: wrap; justify-content: center; max-width: 700px; padding: 0 12px; }
+        #searchBarWrap { max-width: 700px; margin: 14px auto 0; padding: 0 12px; position: relative; }
+        #searchBar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
         #searchBar input { flex: 1; min-width: 220px; padding: 10px 12px; font-size: 1em; }
         #searchBar button { padding: 10px 20px; cursor: pointer; }
-        #searchHint { text-align: center; font-size: 0.82em; color: #666; margin: 0 0 10px 0; }
+        #searchHint { text-align: center; font-size: 0.82em; color: #666; margin: 8px 0 10px 0; }
+        #inlineMsg { text-align: center; font-size: 0.85em; color: #a94442; margin: 0 0 10px 0; display: none; }
+
+        #suggestions {
+            position: absolute; left: 12px; right: 12px; top: 100%;
+            background: white; border: 1px solid #ccc; border-top: none;
+            border-radius: 0 0 6px 6px; z-index: 1000; display: none;
+            max-height: 220px; overflow-y: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        .suggestion-item { padding: 9px 12px; cursor: pointer; font-size: 0.92em; border-bottom: 1px solid #eee; }
+        .suggestion-item:last-child { border-bottom: none; }
+        .suggestion-item:hover, .suggestion-item.active { background: #f0f4f8; }
 
         #mainLayout { display: flex; gap: 14px; align-items: flex-start; padding: 0 14px; max-width: 1100px; margin: 0 auto; }
         #mapWrap { flex: 1 1 auto; transition: flex-basis 0.2s ease; }
@@ -68,13 +80,17 @@
     </noscript>
 
     <div class="pagecontainer">
-        <div id="searchBar">
-            <input type="text" id="searchInput" maxlength="60" autocorrect="off" spellcheck="false"
-                placeholder="Enter your NMI or a suburb, e.g. Parramatta NSW" />
-            <button id="searchBtn">Search</button>
+        <div id="searchBarWrap">
+            <div id="searchBar">
+                <input type="text" id="searchInput" maxlength="60" autocorrect="off" spellcheck="false"
+                    autocomplete="off" placeholder="Enter your NMI or a suburb, e.g. Parramatta" />
+                <button id="searchBtn">Search</button>
+            </div>
+            <div id="suggestions"></div>
         </div>
         <p id="searchHint">NMI's are usually 10 digits (found on your bill) — anything else is treated as a suburb
             search.</p>
+        <p id="inlineMsg"></p>
 
         <div id="mainLayout">
             <div id="mapWrap">
@@ -87,7 +103,7 @@
                 <a id="outageLinkBtn" href="#" target="_blank" rel="noopener" style="display:none;">View outage
                     page &rarr;</a>
             </div>
-        </div>
+                    </div>
 
         <div class="legend" id="legend"></div>
         <p class="disclaimer">Map boundaries are hand-drawn approximations for general guidance only — not official
@@ -97,11 +113,11 @@
     <hr>
     <div class="footer">
         <p>*Note: No support for NMI's starting with letters e.g NCCCxxxxxx</p>
-        <p> Developed by Jards from <a href="https://jardsit.net/">jardsit.net</a> </p>
+        <p> Developed by Jards from <a href="https://jardsit.com/">jardsit.com</a> </p>
     </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/turf.js/6.5.0/turf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
     <script>
         // ---------- Map setup ----------
         const map = L.map('map').setView([-25.5, 134], 4);
@@ -177,8 +193,12 @@
         const resultsTitle = document.getElementById('resultsTitle');
         const resultsTable = document.getElementById('resultsTable');
         const outageBtn = document.getElementById('outageLinkBtn');
+        const inlineMsg = document.getElementById('inlineMsg');
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsBox = document.getElementById('suggestions');
 
         function showPanel(title, rows, outageUrl) {
+            inlineMsg.style.display = 'none';
             resultsTitle.textContent = title;
             resultsTable.innerHTML = rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
             if (outageUrl && outageUrl.startsWith('http')) {
@@ -189,6 +209,11 @@
             }
             panel.classList.add('visible');
         }
+        function showInlineMessage(text) {
+            panel.classList.remove('visible');
+            inlineMsg.textContent = text;
+            inlineMsg.style.display = 'block';
+        }
         document.getElementById('closePanelBtn').addEventListener('click', () => {
             panel.classList.remove('visible');
             resetHighlight();
@@ -196,11 +221,14 @@
 
         // ---------- NMI search (existing API) ----------
         async function searchByNMI(nmi) {
-            showPanel('Searching…', [['NMI', nmi]], null);
             try {
                 const url = `https://api.findmyauspowerdisty.com/find?input_nmi=${encodeURIComponent(nmi)}`;
                 const res = await fetch(url, { mode: 'cors' });
                 const json = await res.json();
+                if (!json || json.Distributor === 'no Data') {
+                    showInlineMessage('No distributor found for that NMI.');
+                    return;
+                }
                 showPanel('NMI Result', [
                     ['Searched NMI', json.NMI],
                     ['Distributor', json.Distributor],
@@ -208,56 +236,117 @@
                 ], json.OutageLink);
                 highlightByDistributorName(json.Distributor || '');
             } catch (e) {
-                showPanel('Error', [['Error', 'Could not reach the lookup API: ' + e]], null);
+                console.error('NMI lookup failed:', e);
+                showInlineMessage('Could not reach the lookup service — please try again.');
             }
         }
 
-        // ---------- Suburb search (geocode + point-in-polygon) ----------
+        // ---------- Suburb selection (from a chosen suggestion, no extra geocode call) ----------
+        function selectSuburbResult(result) {
+            const { lat, lon, display_name } = result;
+            map.setView([lat, lon], 11);
+            if (marker) map.removeLayer(marker);
+            marker = L.marker([lat, lon]).addTo(map);
+
+            const match = findDistributorAtPoint(parseFloat(lon), parseFloat(lat));
+            if (match) {
+                showPanel('Suburb Result', [
+                    ['Suburb', display_name.split(',')[0]],
+                    ['Distributor', match.properties.distributor],
+                    ['State', match.properties.state]
+                ], match.properties.outageUrl);
+                highlightByDistributorName(match.properties.distributor);
+            } else {
+                showInlineMessage('No distributor area matched that location (likely offshore or out of range).');
+            }
+        }
+
+        // Fallback: geocode directly if the user hits Enter/Search before picking a suggestion
         async function searchBySuburb(query) {
-            showPanel('Searching…', [['Suburb', query]], null);
             try {
                 const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=au&limit=1&q=${encodeURIComponent(query)}`;
                 const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
                 const results = await res.json();
                 if (!results.length) {
-                    showPanel('No match', [['Suburb', query], ['Result', 'Not found — try adding the state, e.g. "Parramatta NSW".']], null);
+                    showInlineMessage('Suburb not found — try adding the state, e.g. "Parramatta NSW".');
                     return;
                 }
-                const { lat, lon, display_name } = results[0];
-                map.setView([lat, lon], 11);
-                if (marker) map.removeLayer(marker);
-                marker = L.marker([lat, lon]).addTo(map);
-
-                const match = findDistributorAtPoint(parseFloat(lon), parseFloat(lat));
-                if (match) {
-                    showPanel('Suburb Result', [
-                        ['Suburb', display_name.split(',')[0]],
-                        ['Distributor', match.properties.distributor],
-                        ['State', match.properties.state]
-                    ], match.properties.outageUrl);
-                    highlightByDistributorName(match.properties.distributor);
-                } else {
-                    showPanel('No match', [['Suburb', display_name.split(',')[0]], ['Result', 'No distributor area matched (likely offshore or out of range).']], null);
-                }
+                selectSuburbResult(results[0]);
             } catch (e) {
-                showPanel('Error', [['Error', 'Search failed: ' + e]], null);
+                console.error('Suburb search failed:', e);
+                showInlineMessage('Search failed — please try again.');
             }
         }
 
+        // ---------- Suburb suggestions (debounced autocomplete) ----------
+        let currentSuggestions = [];
+        let debounceTimer = null;
+
+        function hideSuggestions() {
+            suggestionsBox.style.display = 'none';
+            suggestionsBox.innerHTML = '';
+        }
+
+        async function fetchSuggestions(query) {
+            try {
+                const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=au&limit=6&q=${encodeURIComponent(query)}`;
+                const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+                const results = await res.json();
+                currentSuggestions = results;
+                if (!results.length) { hideSuggestions(); return; }
+                suggestionsBox.innerHTML = results.map((r, i) =>
+                    `<div class="suggestion-item" data-index="${i}">${r.display_name}</div>`
+                ).join('');
+                suggestionsBox.style.display = 'block';
+            } catch (e) {
+                console.error('Suggestion fetch failed:', e);
+                hideSuggestions();
+            }
+        }
+
+        searchInput.addEventListener('input', () => {
+            const val = searchInput.value.trim();
+            clearTimeout(debounceTimer);
+            if (!val || /^\d+$/.test(val) || val.length < 3) {
+                hideSuggestions();
+                return;
+            }
+            debounceTimer = setTimeout(() => fetchSuggestions(val), 350);
+        });
+
+        suggestionsBox.addEventListener('click', (e) => {
+            const item = e.target.closest('.suggestion-item');
+            if (!item) return;
+            const idx = parseInt(item.dataset.index, 10);
+            const chosen = currentSuggestions[idx];
+            if (!chosen) return;
+            searchInput.value = chosen.display_name.split(',')[0];
+            hideSuggestions();
+            selectSuburbResult(chosen);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#searchBarWrap')) hideSuggestions();
+        });
+
         // ---------- Router ----------
         function handleSearch() {
-            const query = document.getElementById('searchInput').value.trim();
+            const query = searchInput.value.trim();
             if (!query) return;
+            hideSuggestions();
             const isNMI = /^\d+$/.test(query);
             if (isNMI) {
                 searchByNMI(query);
+            } else if (currentSuggestions.length && currentSuggestions[0].display_name.toLowerCase().startsWith(query.toLowerCase())) {
+                selectSuburbResult(currentSuggestions[0]);
             } else {
                 searchBySuburb(query);
             }
         }
         document.getElementById('searchBtn').addEventListener('click', handleSearch);
-        document.getElementById('searchInput').addEventListener('keydown', (e) => {
+        searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); handleSearch(); }
+            if (e.key === 'Escape') { hideSuggestions(); }
         });
 
         // Click anywhere on the map to identify too
