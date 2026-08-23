@@ -226,7 +226,8 @@
         // ---------- NMI search (existing API) ----------
         async function searchByNMI(nmi) {
             try {
-                const url = `https://api.findmyauspowerdisty.com/find?input_nmi=${encodeURIComponent(nmi)}`;
+                const nmiTrimmed = nmi.slice(0, 10);
+                const url = `https://api.findmyauspowerdisty.com/find?input_nmi=${encodeURIComponent(nmiTrimmed)}`;
                 const res = await fetch(url, { mode: 'cors' });
                 const json = await res.json();
                 if (!json || json.Distributor === 'no Data') {
