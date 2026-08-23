@@ -1,46 +1,45 @@
-
 {
   "type": "FeatureCollection",
   "features": [
     {
       "type": "Feature",
       "properties": { "distributor": "Power and Water Corporation", "state": "NT", "outageUrl": "https://www.powerwater.com.au/customers/outages", "color": "#8e44ad" },
-      "geometry": { "type": "Polygon", "coordinates": [[[129,-11],[138,-11],[138,-26],[129,-26],[129,-11]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[129,-11.2],[131.0,-11.1],[132.6,-11.4],[133.4,-12.0],[136.4,-12.0],[136.8,-12.9],[135.9,-14.9],[138,-16.5],[138,-26],[129,-26],[129,-11.2]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "SA Power Networks", "state": "SA", "outageUrl": "https://www.sapowernetworks.com.au/outages/", "color": "#e67e22" },
-      "geometry": { "type": "Polygon", "coordinates": [[[129,-26],[141,-26],[141,-38.5],[135,-38.5],[129,-33],[129,-26]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[129,-26],[138,-26],[141,-26],[141,-38.06],[140.0,-37.9],[139.5,-36.7],[138.6,-34.93],[137.8,-35.6],[136.8,-35.2],[135.87,-34.73],[135.8,-32.4],[132.5,-31.9],[129,-31.7],[129,-26]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "Western Power", "state": "WA", "outageUrl": "https://www.westernpower.com.au/faults-outages/power-outages/", "color": "#2980b9" },
-      "geometry": { "type": "Polygon", "coordinates": [[[113.3,-27],[122,-27],[122,-35.5],[114.9,-35.5],[113.3,-27]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[114.2,-27.0],[122,-27],[122,-31],[121.9,-33.86],[117.9,-35.05],[115.15,-34.37],[115.6,-33.3],[115.5,-31.9],[114.6,-28.8],[114.2,-27.0]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "Horizon Power", "state": "WA", "outageUrl": "https://www.horizonpower.com.au/faults-outages/", "color": "#16a085" },
-      "geometry": { "type": "Polygon", "coordinates": [[[112.5,-13.5],[129,-13.5],[129,-26],[122,-27],[113.3,-27],[112.5,-13.5]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[112.8,-13.5],[125.5,-13.5],[129,-13.5],[129,-26],[129,-31],[122,-31],[122,-27],[114.2,-27.0],[113.5,-26.0],[113.4,-24.9],[113.66,-23.9],[114.1,-21.9],[114.6,-21.5],[116.85,-20.74],[118.6,-20.3],[121.0,-19.6],[122.2,-18.0],[123.5,-16.4],[126.5,-14.7],[112.8,-13.5]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "Ergon Energy", "state": "QLD", "outageUrl": "https://www.ergon.com.au/network/outages-and-disruptions/power-outages/outage-finder-map", "color": "#27ae60" },
-      "geometry": { "type": "Polygon", "coordinates": [[[138,-10.5],[153.6,-10.5],[153.6,-25.8],[152.0,-25.8],[152.0,-28.3],[153.6,-28.3],[153.6,-29],[138,-29],[138,-10.5]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[138,-16.5],[139.5,-17.0],[140.8,-17.5],[141.5,-15.0],[142.0,-11.0],[142.5,-10.7],[143.7,-12.6],[145.0,-14.6],[145.3,-16.0],[145.9,-16.9],[146.3,-18.3],[146.8,-19.3],[148.2,-20.0],[149.2,-21.1],[150.5,-23.4],[152.4,-24.9],[152.0,-25.8],[153.15,-25.8],[153.15,-27.0],[153.5,-28.0],[153.5,-28.9],[152.0,-28.3],[152.0,-28.3],[152.9,-29.0],[141,-29],[138,-29],[138,-16.5]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "Energex", "state": "QLD", "outageUrl": "https://www.energex.com.au/home/power-outages/outage-finder/outage-finder-map", "color": "#f1c40f" },
-      "geometry": { "type": "Polygon", "coordinates": [[[152.0,-25.8],[153.6,-25.8],[153.6,-28.3],[152.0,-28.3],[152.0,-25.8]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[152.0,-25.8],[153.15,-25.8],[153.45,-27.0],[153.5,-28.0],[152.3,-28.3],[152.0,-28.3],[152.0,-25.8]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "Essential Energy", "state": "NSW", "outageUrl": "https://www.essentialenergy.com.au/outages-and-faults/power-outages", "color": "#c0392b" },
-      "geometry": { "type": "Polygon", "coordinates": [[[141,-29],[153.6,-29],[153.6,-32.5],[152.2,-32.5],[152.2,-34.0],[151.05,-34.0],[151.05,-33.4],[149.8,-33.4],[149.8,-35.0],[150.3,-35.0],[150.3,-34.05],[151.2,-35.0],[150.0,-37.0],[141,-37.0],[141,-29]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[141,-29],[153.4,-29],[153.3,-30.3],[153.0,-31.4],[152.6,-32.5],[152.2,-32.5],[152.2,-34.0],[151.05,-34.0],[151.05,-33.4],[149.8,-33.4],[149.8,-35.0],[150.3,-35.0],[150.3,-34.05],[151.2,-35.0],[150.5,-36.3],[149.9,-37.5],[146.9,-36.1],[141,-34.0],[141,-29]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "Ausgrid", "state": "NSW", "outageUrl": "https://www.ausgrid.com.au/Outages/Current-Outages", "color": "#d35400" },
-      "geometry": { "type": "Polygon", "coordinates": [[[151.0,-32.5],[152.2,-32.5],[152.2,-34.0],[151.05,-34.0],[151.05,-33.4],[151.0,-33.4],[151.0,-32.5]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[151.7,-32.5],[152.2,-32.5],[152.2,-34.0],[151.05,-34.0],[151.05,-33.4],[151.0,-33.4],[151.15,-32.7],[151.7,-32.5]]] }
     },
     {
       "type": "Feature",
@@ -55,12 +54,12 @@
     {
       "type": "Feature",
       "properties": { "distributor": "AusNet Services", "state": "VIC", "outageUrl": "https://www.outagetracker.com.au/", "color": "#1abc9c" },
-      "geometry": { "type": "Polygon", "coordinates": [[[145.4,-36.0],[150.0,-36.0],[150.0,-39.2],[145.4,-39.2],[145.4,-38.4],[145.05,-37.75],[145.05,-37.6],[145.4,-37.6],[145.4,-36.0]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[145.4,-36.1],[146.9,-36.1],[149.9,-37.5],[148.5,-38.0],[146.4,-39.03],[145.6,-38.5],[145.4,-38.4],[145.05,-37.75],[145.05,-37.6],[145.4,-37.6],[145.4,-36.1]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "Powercor Australia", "state": "VIC", "outageUrl": "https://www.powercor.com.au/power-outages-and-faults/live-outage-map/", "color": "#3498db" },
-      "geometry": { "type": "Polygon", "coordinates": [[[141,-36.0],[145.4,-36.0],[145.4,-37.6],[144.85,-37.6],[144.85,-37.75],[145.0,-37.75],[145.0,-38.4],[141,-38.4],[141,-36.0]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[141,-34.0],[145.4,-36.1],[145.4,-37.6],[144.85,-37.6],[144.85,-37.75],[145.0,-37.75],[145.0,-38.4],[144.5,-38.35],[142.2,-38.35],[141,-38.0],[141,-34.0]]] }
     },
     {
       "type": "Feature",
@@ -75,12 +74,12 @@
     {
       "type": "Feature",
       "properties": { "distributor": "United Energy", "state": "VIC", "outageUrl": "https://www.unitedenergy.com.au/outage-map/", "color": "#34495e" },
-      "geometry": { "type": "Polygon", "coordinates": [[[144.85,-37.87],[145.05,-37.87],[145.05,-37.75],[145.4,-37.75],[145.4,-38.4],[144.85,-38.4],[144.85,-37.87]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[144.85,-37.87],[145.05,-37.87],[145.05,-37.75],[145.4,-37.75],[145.6,-38.5],[145.2,-38.4],[144.85,-38.35],[144.85,-37.87]]] }
     },
     {
       "type": "Feature",
       "properties": { "distributor": "TasNetworks", "state": "TAS", "outageUrl": "https://www.tasnetworks.com.au/outages", "color": "#7f8c8d" },
-      "geometry": { "type": "Polygon", "coordinates": [[[144,-39.5],[148.7,-39.5],[148.7,-43.7],[144,-43.7],[144,-39.5]]] }
+      "geometry": { "type": "Polygon", "coordinates": [[[144.7,-40.8],[144.9,-39.4],[146.3,-39.15],[147.5,-40.8],[148.3,-40.9],[148.3,-42.6],[147.9,-43.5],[146.8,-43.64],[146.05,-43.4],[145.2,-42.5],[144.7,-40.8]]] }
     }
   ]
 }
