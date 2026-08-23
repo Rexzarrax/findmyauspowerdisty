@@ -1,8 +1,12 @@
 .header {
     background-color: #c9c9c9;
     text-align: center;
-    padding: 20px;
-    margin: 10px;
+    padding: 10px 20px;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
 
 
@@ -43,11 +47,17 @@
   }
 
   #title {
-    font-size: 150%;
-    font: "Times New Roman";
-    text-align: center;
-    display: inline-flexbox;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
   }
+
+  #Header-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+  
 input[type=string] {
   background-color: white;
   /*background-image: url('searchicon.png');*/
