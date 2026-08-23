@@ -4,107 +4,277 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- 
-    <script>
-        window.addEventListener("load", function () {
-            document
-                .getElementById("findDistyForm")
-                .addEventListener("submit", function (e) {
-                    e.preventDefault();
-
-                    let nmi = document.getElementById("input_nmi").value;
-                    let feedback = document.getElementById("feedbackresponse");
-
-                    submitNMI(nmi, feedback);
-
-                    return false;
-                });
-        });
-
-        async function submitNMI(nmi, feedback) {
-            // Hide the existing response
-            feedback.innerHTML += "<p>Loading...</p>"
-            //feedback.style.display = "none";
-
-            let url = `https://api.findmyauspowerdisty.com/find?input_nmi=${encodeURIComponent(
-                nmi
-            )}`;
-
-            let headers = new Headers({
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            });
-
-            let params = {
-                headers,
-                mode: "cors",
-            };
-            try {
-                let response = await fetch(url, params);
-                let json = await response.json();
-                // Add a visible delay before showing the response
-                setTimeout(function () {
-                    feedback.innerHTML =
-                        "<table><tr><td>Searched NMI</td><td>" + json.NMI + "</td></tr><tr><td>Distributor</td><td>" + json.Distributor + "</td></tr><tr><td>Outage Page</td><td><a href=\"" + json.OutageLink + "\">" + json.OutageLink + "</a></td></tr><tr><td>State</td><td>" + json.state + "</a></td></tr></table>";
-                    feedback.style.display = "block";
-                }, 800);
-            }
-            catch (e) {
-                feedback.innerHTML = "An Error Occured." + e;
-            }
-
-        }
-    </script>
+    <title>findmyauspowerdisty.com</title>
     <link rel="icon" type="image/x-icon" href="./images/logo-findmyauspowerdisty.ico">
     <link rel="stylesheet" href="style.css">
-    <title>findmyauspowerdisty.com</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        #searchBar { display: flex; gap: 8px; margin: 14px auto; flex-wrap: wrap; justify-content: center; max-width: 700px; padding: 0 12px; }
+        #searchBar input { flex: 1; min-width: 220px; padding: 10px 12px; font-size: 1em; }
+        #searchBar button { padding: 10px 20px; cursor: pointer; }
+        #searchHint { text-align: center; font-size: 0.82em; color: #666; margin: 0 0 10px 0; }
+
+        #mainLayout { display: flex; gap: 14px; align-items: flex-start; padding: 0 14px; max-width: 1100px; margin: 0 auto; }
+        #mapWrap { flex: 1 1 auto; transition: flex-basis 0.2s ease; }
+        #map { width: 100%; height: 46vh; min-height: 340px; border-radius: 6px; }
+
+        #resultsPanel {
+            flex: 0 0 300px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 12px;
+            background: #fafafa;
+            position: relative;
+            display: none;
+        }
+        #resultsPanel.visible { display: block; }
+        #resultsPanel h3 { margin: 0 20px 8px 0; font-size: 1.05em; }
+        #closePanelBtn {
+            position: absolute; top: 8px; right: 8px;
+            background: none; border: none; font-size: 1.3em; cursor: pointer;
+            line-height: 1; color: #666; padding: 2px 6px;
+        }
+        #closePanelBtn:hover { color: #000; }
+        #resultsTable { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+        #resultsTable td { padding: 6px 4px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+        #resultsTable td:first-child { font-weight: 600; width: 40%; color: #444; }
+        #outageLinkBtn {
+            display: block; text-align: center; margin-top: 12px; padding: 10px;
+            background: #2c3e50; color: white; text-decoration: none; border-radius: 4px;
+        }
+        #outageLinkBtn:hover { background: #1a252f; }
+
+        @media (max-width: 720px) {
+            #mainLayout { flex-direction: column; }
+            #resultsPanel { flex-basis: auto; width: 100%; }
+        }
+
+        .legend { display: flex; flex-wrap: wrap; gap: 5px 12px; justify-content: center; margin: 10px 0; font-size: 0.78em; max-width: 1100px; margin-left: auto; margin-right: auto; padding: 0 14px; }
+        .legend span.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+        .disclaimer { text-align: center; font-size: 0.78em; color: #666; margin: 8px 14px 0; }
+    </style>
 </head>
 
 <body>
     <div class="header">
-        <img style="display: inline" id="Header-logo" src="./images/logo-findmyauspowerdisty.png" alt="FMAPD Logo" width="10%" height="10%"/>
-        <div style="display: inline">
-            <p id="title">Find My Aussie Power Disty</p>
-        </div>
+        <img id="Header-logo" src="./images/logo-findmyauspowerdisty.png" alt="FMAPD Logo" />
+        <p id="title">Find My Aussie Power Disty</p>
     </div>
-    <hr>
 
     <noscript>
-        <style type="text/css">
-            .pagecontainer {display:none;}
-            .noscriptmsg {color: red; align-self: center;}
-        </style>
-            <div class="noscriptmsg">
-                Looks like you don't have javascript enabled. For this page to work, it requires Javascript.
-            </div>
+        <style>.pagecontainer { display: none; } .noscriptmsg { color: red; text-align: center; }</style>
+        <div class="noscriptmsg">Looks like you don't have javascript enabled. For this page to work, it requires
+            Javascript.</div>
     </noscript>
-    <div class="pagecontainer"></div>
-        <div class="row">
-            <div class="column left"></div>
-            <div class="column middle">
-                <p style="text-align: center;">Please enter your NMI below, It can be found on your most recent
-                    utility bill. It should be a total of 10 numbers. Usually, only the first 6 need to be entered to find your distributor.</p>
-                <div id="search">
-                    <form id="findDistyForm">
-                        <input maxlength="10" autocapitalize="on" autocorrect="off" id="input_nmi" name="input_nmi"
-                            placeholder="Enter NMI" spellcheck="false" type="string" />
-                        <button type="submit">Search</button>
 
-                        <div id="feedbackresponse"></div>
-                    </form>
-                </div>
-            </div>
-            <div class="column right"></div>
+    <div class="pagecontainer">
+        <div id="searchBar">
+            <input type="text" id="searchInput" maxlength="60" autocorrect="off" spellcheck="false"
+                placeholder="Enter your NMI or a suburb, e.g. Parramatta NSW" />
+            <button id="searchBtn">Search</button>
         </div>
+        <p id="searchHint">NMI's are usually 10 digits (found on your bill) — anything else is treated as a suburb
+            search.</p>
+
+        <div id="mainLayout">
+            <div id="mapWrap">
+                <div id="map"></div>
+            </div>
+            <div id="resultsPanel">
+                <button id="closePanelBtn" title="Close">&times;</button>
+                <h3 id="resultsTitle">Result</h3>
+                <table id="resultsTable"></table>
+                <a id="outageLinkBtn" href="#" target="_blank" rel="noopener" style="display:none;">View outage
+                    page &rarr;</a>
+            </div>
+        </div>
+
+        <div class="legend" id="legend"></div>
+        <p class="disclaimer">Map boundaries are hand-drawn approximations for general guidance only — not official
+            network maps. NMI ranges based on the AEMO NMI Allocation list.</p>
     </div>
+
     <hr>
     <div class="footer">
         <p>*Note: No support for NMI's starting with letters e.g NCCCxxxxxx</p>
-        <p>Based on version 13(Nov 2022) of the <a
-                href="https://www.aemo.com.au/-/media/Files/Electricity/NEM/Retail_and_Metering/Metering-Procedures/NMI-Allocation-List.pdf">NMI
-                Allocation list</a></p>
-        <br>
-        <p> Developed by Jards from <a href="https://jardsit.com/">jardsit.com</a> </p>
+        <p> Developed by Jards from <a href="https://jardsit.net/">jardsit.net</a> </p>
     </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turf.js/6.5.0/turf.min.js"></script>
+    <script>
+        // ---------- Map setup ----------
+        const map = L.map('map').setView([-25.5, 134], 4);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        let geoData = null;
+        let geoLayer = null;
+        let marker = null;
+        const legendDiv = document.getElementById('legend');
+
+        function defaultStyle(feature) {
+            return { color: feature.properties.color, weight: 1.5, fillColor: feature.properties.color, fillOpacity: 0.35 };
+        }
+        function highlightStyle(feature) {
+            return { color: feature.properties.color, weight: 3, fillColor: feature.properties.color, fillOpacity: 0.6 };
+        }
+
+        fetch('distributors.geojson')
+            .then(r => r.json())
+            .then(data => {
+                geoData = data;
+                const seen = new Set();
+                data.features.forEach(f => {
+                    const name = f.properties.distributor;
+                    if (seen.has(name)) return;
+                    seen.add(name);
+                    const item = document.createElement('span');
+                    item.innerHTML = `<span class="swatch" style="background:${f.properties.color}"></span>${name}`;
+                    legendDiv.appendChild(item);
+                });
+                geoLayer = L.geoJSON(data, {
+                    style: defaultStyle,
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup(`<strong>${feature.properties.distributor}</strong><br>${feature.properties.state}<br><a href="${feature.properties.outageUrl}" target="_blank" rel="noopener">Outage page</a>`);
+                    }
+                }).addTo(map);
+            })
+            .catch(err => console.error('Could not load boundary data:', err));
+
+        function findDistributorAtPoint(lng, lat) {
+            if (!geoData) return null;
+            const pt = turf.point([lng, lat]);
+            return geoData.features.find(f => turf.booleanPointInPolygon(pt, f)) || null;
+        }
+
+        function resetHighlight() {
+            if (geoLayer) geoLayer.eachLayer(l => geoLayer.resetStyle ? geoLayer.resetStyle(l) : l.setStyle(defaultStyle(l.feature)));
+        }
+
+        function highlightByDistributorName(apiName) {
+            if (!geoLayer || !apiName) return null;
+            let matchedLayer = null;
+            const target = apiName.toLowerCase();
+            geoLayer.eachLayer(l => {
+                const geoName = l.feature.properties.distributor.toLowerCase();
+                if (target.includes(geoName) || geoName.includes(target.split(' ')[0])) {
+                    matchedLayer = l;
+                }
+            });
+            if (matchedLayer) {
+                geoLayer.eachLayer(l => l.setStyle(l === matchedLayer ? highlightStyle(l.feature) : defaultStyle(l.feature)));
+                map.fitBounds(matchedLayer.getBounds(), { maxZoom: 8, padding: [20, 20] });
+            }
+            return matchedLayer;
+        }
+
+        // ---------- Results panel ----------
+        const panel = document.getElementById('resultsPanel');
+        const resultsTitle = document.getElementById('resultsTitle');
+        const resultsTable = document.getElementById('resultsTable');
+        const outageBtn = document.getElementById('outageLinkBtn');
+
+        function showPanel(title, rows, outageUrl) {
+            resultsTitle.textContent = title;
+            resultsTable.innerHTML = rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+            if (outageUrl && outageUrl.startsWith('http')) {
+                outageBtn.href = outageUrl;
+                outageBtn.style.display = 'block';
+            } else {
+                outageBtn.style.display = 'none';
+            }
+            panel.classList.add('visible');
+        }
+        document.getElementById('closePanelBtn').addEventListener('click', () => {
+            panel.classList.remove('visible');
+            resetHighlight();
+        });
+
+        // ---------- NMI search (existing API) ----------
+        async function searchByNMI(nmi) {
+            showPanel('Searching…', [['NMI', nmi]], null);
+            try {
+                const url = `https://api.findmyauspowerdisty.com/find?input_nmi=${encodeURIComponent(nmi)}`;
+                const res = await fetch(url, { mode: 'cors' });
+                const json = await res.json();
+                showPanel('NMI Result', [
+                    ['Searched NMI', json.NMI],
+                    ['Distributor', json.Distributor],
+                    ['State', json.state]
+                ], json.OutageLink);
+                highlightByDistributorName(json.Distributor || '');
+            } catch (e) {
+                showPanel('Error', [['Error', 'Could not reach the lookup API: ' + e]], null);
+            }
+        }
+
+        // ---------- Suburb search (geocode + point-in-polygon) ----------
+        async function searchBySuburb(query) {
+            showPanel('Searching…', [['Suburb', query]], null);
+            try {
+                const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=au&limit=1&q=${encodeURIComponent(query)}`;
+                const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+                const results = await res.json();
+                if (!results.length) {
+                    showPanel('No match', [['Suburb', query], ['Result', 'Not found — try adding the state, e.g. "Parramatta NSW".']], null);
+                    return;
+                }
+                const { lat, lon, display_name } = results[0];
+                map.setView([lat, lon], 11);
+                if (marker) map.removeLayer(marker);
+                marker = L.marker([lat, lon]).addTo(map);
+
+                const match = findDistributorAtPoint(parseFloat(lon), parseFloat(lat));
+                if (match) {
+                    showPanel('Suburb Result', [
+                        ['Suburb', display_name.split(',')[0]],
+                        ['Distributor', match.properties.distributor],
+                        ['State', match.properties.state]
+                    ], match.properties.outageUrl);
+                    highlightByDistributorName(match.properties.distributor);
+                } else {
+                    showPanel('No match', [['Suburb', display_name.split(',')[0]], ['Result', 'No distributor area matched (likely offshore or out of range).']], null);
+                }
+            } catch (e) {
+                showPanel('Error', [['Error', 'Search failed: ' + e]], null);
+            }
+        }
+
+        // ---------- Router ----------
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+            const isNMI = /^\d+$/.test(query);
+            if (isNMI) {
+                searchByNMI(query);
+            } else {
+                searchBySuburb(query);
+            }
+        }
+        document.getElementById('searchBtn').addEventListener('click', handleSearch);
+        document.getElementById('searchInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); handleSearch(); }
+        });
+
+        // Click anywhere on the map to identify too
+        map.on('click', (e) => {
+            const match = findDistributorAtPoint(e.latlng.lng, e.latlng.lat);
+            if (marker) map.removeLayer(marker);
+            marker = L.marker(e.latlng).addTo(map);
+            if (match) {
+                showPanel('Map Result', [
+                    ['Location', `${e.latlng.lat.toFixed(3)}, ${e.latlng.lng.toFixed(3)}`],
+                    ['Distributor', match.properties.distributor],
+                    ['State', match.properties.state]
+                ], match.properties.outageUrl);
+                highlightByDistributorName(match.properties.distributor);
+            }
+        });
+    </script>
 </body>
 
 </html>
