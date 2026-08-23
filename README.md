@@ -10,5 +10,4 @@ API Repo: https://github.com/Rexzarrax/findmyauspowerdisty-api
 
 ---
 ### Todo:
-- favicon
-- Logo
+- Outage event list and history
