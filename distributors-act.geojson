@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"distributor":"Evoenergy","state":"ACT","outageUrl":"https://www.evoenergy.com.au/residents/emergencies-faults-outages/outages","color":"#2c3e50"},"geometry":{"type":"Polygon","coordinates":[[[148.75,-35.15],[149.4,-35.15],[149.4,-35.6],[148.75,-35.6],[148.75,-35.15]]]}}]}
