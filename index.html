@@ -139,9 +139,13 @@
             return { color: feature.properties.color, weight: 3, fillColor: feature.properties.color, fillOpacity: 0.6 };
         }
 
-        fetch('distributors.geojson')
-            .then(r => r.json())
-            .then(data => {
+        const STATE_FILES = ['nt', 'sa', 'tas', 'act', 'wa', 'qld', 'nsw', 'vic'];
+        Promise.all(
+            STATE_FILES.map(s => fetch(`distributors-${s}.geojson`).then(r => r.json()))
+        )
+            .then(results => {
+                const allFeatures = results.flatMap(r => r.features);
+                const data = { type: 'FeatureCollection', features: allFeatures };
                 geoData = data;
                 const seen = new Set();
                 data.features.forEach(f => {
