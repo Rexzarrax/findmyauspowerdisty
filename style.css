@@ -57,7 +57,7 @@
     height: 40px;
     object-fit: contain;
   }
-  
+
 input[type=string] {
   background-color: white;
   /*background-image: url('searchicon.png');*/
@@ -90,10 +90,12 @@ button[type=submit]:hover{
 
   
   /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 720px) {
     .left, .middle, .right {
       width: 100%;
     }
+#mainLayout { flex-direction: column; align-items: stretch; }
+#mapWrap { width: 100%; }
   }
 
   .footer {
