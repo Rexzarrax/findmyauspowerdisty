@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Distributor Map | findmyauspowerdisty.com</title>
+    <link rel="icon" type="image/x-icon" href="./images/logo-findmyauspowerdisty.ico">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        #map { width: 100%; height: 65vh; min-height: 420px; border-radius: 6px; }
+        #mapSearch { display: flex; gap: 8px; margin: 12px 0; flex-wrap: wrap; justify-content: center; }
+        #mapSearch input { flex: 1; min-width: 220px; padding: 8px; }
+        #mapResult { text-align: center; min-height: 1.5em; margin-bottom: 8px; }
+        .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; margin: 10px 0; font-size: 0.85em; }
+        .legend span.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+        .disclaimer { text-align: center; font-size: 0.8em; color: #666; margin-top: 6px; }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <img style="display: inline" id="Header-logo" src="./images/logo-findmyauspowerdisty.png" alt="FMAPD Logo" width="10%" height="10%" />
+        <div style="display: inline">
+            <p id="title">Find My Aussie Power Disty</p>
+        </div>
+    </div>
+    <hr>
+
+    <div class="pagecontainer">
+        <p style="text-align: center;">Search a suburb, or click the map, to see the rough distributor coverage area.</p>
+
+        <div id="mapSearch">
+            <input type="text" id="suburbInput" placeholder="Enter a suburb, e.g. Parramatta NSW" />
+            <button id="suburbSearchBtn">Search</button>
+        </div>
+        <div id="mapResult"></div>
+
+        <div id="map"></div>
+
+        <div class="legend" id="legend"></div>
+        <p class="disclaimer">Boundaries are hand-drawn approximations for general guidance only — not official
+            network maps. Always confirm with your distributor for exact coverage.</p>
+    </div>
+
+    <hr>
+    <div class="footer">
+        <p><a href="index.html">&larr; Back to NMI lookup</a></p>
+        <p> Developed by Jards from <a href="https://jardsit.net/">jardsit.net</a> </p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turf.js/6.5.0/turf.min.js"></script>
+    <script>
+        const map = L.map('map').setView([-25.5, 134], 4);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        let geoData = null;
+        let geoLayer = null;
+        let marker = null;
+        const resultDiv = document.getElementById('mapResult');
+        const legendDiv = document.getElementById('legend');
+
+        fetch('distributors.geojson')
+            .then(r => r.json())
+            .then(data => {
+                geoData = data;
+
+                // Build legend
+                const seen = new Set();
+                data.features.forEach(f => {
+                    const name = f.properties.distributor;
+                    if (seen.has(name)) return;
+                    seen.add(name);
+                    const item = document.createElement('span');
+                    item.innerHTML = `<span class="swatch" style="background:${f.properties.color}"></span>${name}`;
+                    legendDiv.appendChild(item);
+                });
+
+                geoLayer = L.geoJSON(data, {
+                    style: (feature) => ({
+                        color: feature.properties.color,
+                        weight: 1.5,
+                        fillColor: feature.properties.color,
+                        fillOpacity: 0.35
+                    }),
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup(`<strong>${feature.properties.distributor}</strong><br>${feature.properties.state}<br><a href="${feature.properties.outageUrl}" target="_blank" rel="noopener">Outage page</a>`);
+                    }
+                }).addTo(map);
+            })
+            .catch(err => {
+                resultDiv.innerHTML = 'Could not load boundary data.';
+                console.error(err);
+            });
+
+        function findDistributorAtPoint(lng, lat) {
+            if (!geoData) return null;
+            const pt = turf.point([lng, lat]);
+            for (const feature of geoData.features) {
+                if (turf.booleanPointInPolygon(pt, feature)) {
+                    return feature;
+                }
+            }
+            return null;
+        }
+
+        function showResultForPoint(lng, lat, label) {
+            if (marker) map.removeLayer(marker);
+            marker = L.marker([lat, lng]).addTo(map);
+
+            const match = findDistributorAtPoint(lng, lat);
+            if (match) {
+                resultDiv.innerHTML = `<strong>${label || 'Selected point'}</strong> is roughly in the <strong>${match.properties.distributor}</strong> area (${match.properties.state}). <a href="${match.properties.outageUrl}" target="_blank" rel="noopener">Outage page &rarr;</a>`;
+            } else {
+                resultDiv.innerHTML = `<strong>${label || 'Selected point'}</strong> — no distributor area matched (likely offshore or outside covered regions).`;
+            }
+        }
+
+        map.on('click', (e) => {
+            showResultForPoint(e.latlng.lng, e.latlng.lat);
+        });
+
+        async function searchSuburb() {
+            const query = document.getElementById('suburbInput').value.trim();
+            if (!query) return;
+            resultDiv.innerHTML = 'Searching...';
+            try {
+                const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=au&limit=1&q=${encodeURIComponent(query)}`;
+                const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+                const results = await res.json();
+                if (!results.length) {
+                    resultDiv.innerHTML = 'Suburb not found. Try adding the state, e.g. "Parramatta NSW".';
+                    return;
+                }
+                const { lat, lon, display_name } = results[0];
+                map.setView([lat, lon], 11);
+                showResultForPoint(parseFloat(lon), parseFloat(lat), display_name.split(',')[0]);
+            } catch (e) {
+                resultDiv.innerHTML = 'Search failed: ' + e;
+            }
+        }
+
+        document.getElementById('suburbSearchBtn').addEventListener('click', searchSuburb);
+        document.getElementById('suburbInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); searchSuburb(); }
+        });
+    </script>
+</body>
+
+</html>
