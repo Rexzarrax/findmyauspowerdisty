@@ -142,7 +142,7 @@
 
         const STATE_FILES = ['nt', 'sa', 'tas', 'act', 'wa', 'qld', 'nsw', 'vic'];
         Promise.all(
-            STATE_FILES.map(s => fetch(`distributors-${s}.geojson`).then(r => r.json()))
+            STATE_FILES.map(s => fetch(`boundaries/distributors-${s}.geojson`).then(r => r.json()))
         )
             .then(results => {
                 const allFeatures = results.flatMap(r => r.features);
