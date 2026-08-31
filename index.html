@@ -160,6 +160,9 @@
                     style: defaultStyle,
                     onEachFeature: (feature, layer) => {
                         layer.bindPopup(`<strong>${feature.properties.distributor}</strong><br>${feature.properties.state}<br><a href="${feature.properties.outageUrl}" target="_blank" rel="noopener">Outage page</a>`);
+                        layer.on('click', () => {
+                            if (marker) { map.removeLayer(marker); marker = null; }
+                        });
                     }
                 }).addTo(map);
             })
