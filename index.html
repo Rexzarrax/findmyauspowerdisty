@@ -122,9 +122,9 @@
     <script>
         // ---------- Map setup ----------
         const map = L.map('map').setView([-25.5, 134], 4);
-        L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors, style by Wikimedia',
-            maxZoom: 18
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, HERE, Garmin, USGS, Intermap',
+            maxZoom: 19
         }).addTo(map);
 
         let geoData = null;
