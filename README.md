@@ -1,13 +1,11 @@
-# Findmyauspowerdisty
----
-Find my Aus Power distrubutor.
+Find your Australian power distributor.
 
-A basic website to find details on your power provider. 
-Mainly for the outage page and contact number.
+A web tool for finding who your power distributor is, mainly so you can get to their outage page and contact number quickly. Look up by NMI or browse distributor boundaries on the map.
 
-Website: https://findmyauspowerdisty.com
-API Repo: https://github.com/Rexzarrax/findmyauspowerdisty-api
+- **Website:** https://findmyauspowerdisty.com
+- **API repo:** [findmyauspowerdisty-api](https://github.com/Rexzarrax/findmyauspowerdisty-api)
 
----
-### Todo:
-- Outage event list and history
+## Roadmap
+
+- [ ] Live outage event list
+- [ ] Outage history
