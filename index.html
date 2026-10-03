@@ -140,7 +140,6 @@
         }
 
         const STATE_FILES = ['nt', 'sa', 'tas', 'act', 'wa', 'qld', 'nsw-act', 'vic'];
-                const STATE_FILES = ['nt', 'sa', 'tas', 'wa', 'qld', 'nsw-act', 'vic'];
         Promise.allSettled(
             STATE_FILES.map(s =>
                 fetch(`boundaries/distributors-${s}.geojson`).then(r => {
@@ -178,7 +177,7 @@
                 }).addTo(map);
             })
             .catch(err => console.error('Could not load boundary data:', err));
-            
+
         function findDistributorAtPoint(lng, lat) {
             if (!geoData) return null;
             const pt = turf.point([lng, lat]);
