@@ -139,12 +139,23 @@
             return { color: feature.properties.color, weight: 3, fillColor: feature.properties.color, fillOpacity: 0.6 };
         }
 
-        const STATE_FILES = ['nt', 'sa', 'tas', 'act', 'wa', 'qld', 'nsw', 'vic'];
-        Promise.all(
-            STATE_FILES.map(s => fetch(`boundaries/distributors-${s}.geojson`).then(r => r.json()))
+        const STATE_FILES = ['nt', 'sa', 'tas', 'act', 'wa', 'qld', 'nsw-act', 'vic'];
+                const STATE_FILES = ['nt', 'sa', 'tas', 'wa', 'qld', 'nsw-act', 'vic'];
+        Promise.allSettled(
+            STATE_FILES.map(s =>
+                fetch(`boundaries/distributors-${s}.geojson`).then(r => {
+                    if (!r.ok) throw new Error(`${s}: HTTP ${r.status}`);
+                    return r.json();
+                })
+            )
         )
             .then(results => {
-                const allFeatures = results.flatMap(r => r.features);
+                results
+                    .filter(r => r.status === 'rejected')
+                    .forEach(r => console.error('Boundary file failed:', r.reason));
+                const allFeatures = results
+                    .filter(r => r.status === 'fulfilled')
+                    .flatMap(r => r.value.features);
                 const data = { type: 'FeatureCollection', features: allFeatures };
                 geoData = data;
                 const seen = new Set();
@@ -167,7 +178,7 @@
                 }).addTo(map);
             })
             .catch(err => console.error('Could not load boundary data:', err));
-
+            
         function findDistributorAtPoint(lng, lat) {
             if (!geoData) return null;
             const pt = turf.point([lng, lat]);
