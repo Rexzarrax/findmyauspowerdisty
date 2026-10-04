@@ -16,13 +16,30 @@
             .pagecontainer { max-width: 100%; padding: 0 14px; }
         }
         #distMap { width: 100%; height: 45vh; min-height: 320px; border-radius: 6px; }
+        #suburbFilter {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            margin: 14px 0 6px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        #suburbCount { text-align: center; font-size: 0.82em; color: #777; margin: 0 0 10px; }
         .suburb-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 6px 16px;
             margin: 16px 0;
+            max-height: 480px;
+            overflow-y: auto;
+            padding: 4px 2px;
+            border: 1px solid #eee;
+            border-radius: 6px;
         }
         .suburb-grid span { color: #333; }
+        .suburb-grid span.hidden { display: none; }
         .outage-cta {
             display: inline-block;
             background-color: #f39c12;
@@ -63,11 +80,86 @@
         <div id="distMap"></div>
 
         <h2 style="text-align:center;">Suburbs &amp; towns in the CitiPower network area</h2>
-        <p style="text-align:center;">This is a representative list, not exhaustive &mdash; use the <a href="../index.html">interactive map</a> to check any specific address.</p>
-        <div class="suburb-grid">
-            <span>Brunswick</span>
-            <span>Melbourne CBD</span>
-            <span>Richmond</span>
+        <p style="text-align:center;">76 suburbs and towns matched to CitiPower from the current boundary data &mdash; or use the <a href="../index.html">interactive map</a> to check any specific address.</p>
+        <input type="text" id="suburbFilter" placeholder="Filter this list, e.g. type a suburb name..." autocomplete="off" />
+        <p id="suburbCount"></p>
+        <div class="suburb-grid" id="suburbGrid">
+            <span>ABBOTSFORD</span>
+            <span>ALBERT PARK</span>
+            <span>ALPHINGTON</span>
+            <span>AUBURN SOUTH</span>
+            <span>BRUNSWICK</span>
+            <span>BRUNSWICK EAST</span>
+            <span>BRUNSWICK LOWER</span>
+            <span>BRUNSWICK NORTH</span>
+            <span>BRUNSWICK SOUTH</span>
+            <span>BRUNSWICK WEST</span>
+            <span>BURNLEY</span>
+            <span>BURNLEY NORTH</span>
+            <span>CARLTON</span>
+            <span>CARLTON NORTH</span>
+            <span>CARLTON SOUTH</span>
+            <span>CHAPEL STREET NORTH</span>
+            <span>CLIFTON HILL</span>
+            <span>COLLINGWOOD</span>
+            <span>COLLINGWOOD NORTH</span>
+            <span>COTHAM</span>
+            <span>CREMORNE</span>
+            <span>DOCKLANDS</span>
+            <span>DOMAIN ROAD PO</span>
+            <span>EAST MELBOURNE</span>
+            <span>FAIRFIELD</span>
+            <span>FITZROY</span>
+            <span>FITZROY NORTH</span>
+            <span>FLEMINGTON</span>
+            <span>FOOTSCRAY</span>
+            <span>GARDEN CITY</span>
+            <span>GLENFERRIE SOUTH</span>
+            <span>HAWKSBURN</span>
+            <span>HAWTHORN</span>
+            <span>HAWTHORN NORTH</span>
+            <span>HAWTHORN WEST</span>
+            <span>HOTHAM HILL</span>
+            <span>KENSINGTON</span>
+            <span>KEW</span>
+            <span>KEW EAST</span>
+            <span>LYGON STREET NORTH</span>
+            <span>MELBOURNE</span>
+            <span>MELBOURNE UNIVERSITY</span>
+            <span>MIDDLE PARK</span>
+            <span>MOONEE VALE</span>
+            <span>MORELAND WEST</span>
+            <span>NORTH MELBOURNE</span>
+            <span>NORTH POLE</span>
+            <span>NORTHCOTE</span>
+            <span>NORTHCOTE SOUTH</span>
+            <span>PARKVILLE</span>
+            <span>PORT MELBOURNE</span>
+            <span>PRAHRAN</span>
+            <span>PRAHRAN EAST</span>
+            <span>PRINCES HILL</span>
+            <span>RICHMOND</span>
+            <span>RICHMOND EAST</span>
+            <span>RICHMOND NORTH</span>
+            <span>RICHMOND SOUTH</span>
+            <span>ROYAL MELBOURNE HOSPITAL</span>
+            <span>SEDDON</span>
+            <span>SEDDON WEST</span>
+            <span>SOUTH MELBOURNE</span>
+            <span>SOUTH MELBOURNE DC</span>
+            <span>SOUTH WHARF</span>
+            <span>SOUTH YARRA</span>
+            <span>SOUTHBANK</span>
+            <span>ST KILDA ROAD CENTRAL</span>
+            <span>ST KILDA ROAD MELBOURNE</span>
+            <span>SUMNER</span>
+            <span>THORNBURY</span>
+            <span>TOORAK</span>
+            <span>UNIVERSITY OF MELBOURNE</span>
+            <span>VICTORIA GARDENS</span>
+            <span>WEST MELBOURNE</span>
+            <span>WINDSOR</span>
+            <span>WORLD TRADE CENTRE</span>
         </div>
 
         <h2 style="text-align:center;">Frequently asked questions</h2>
@@ -121,6 +213,28 @@
                 map.setView([-25.5, 134], 4);
             }
         }).catch(() => map.setView([-25.5, 134], 4));
+
+        // ---------- Suburb list filter (pure client-side, no backend) ----------
+        const filterInput = document.getElementById('suburbFilter');
+        const suburbGrid = document.getElementById('suburbGrid');
+        const suburbSpans = Array.from(suburbGrid.querySelectorAll('span'));
+        const countEl = document.getElementById('suburbCount');
+
+        function updateCount() {
+            const visible = suburbSpans.filter(s => !s.classList.contains('hidden')).length;
+            countEl.textContent = filterInput.value.trim()
+                ? `Showing ${visible} of ${suburbSpans.length}`
+                : '';
+        }
+
+        filterInput.addEventListener('input', () => {
+            const q = filterInput.value.trim().toLowerCase();
+            suburbSpans.forEach(s => {
+                const match = !q || s.textContent.toLowerCase().includes(q);
+                s.classList.toggle('hidden', !match);
+            });
+            updateCount();
+        });
     </script>
 </body>
 

@@ -16,13 +16,30 @@
             .pagecontainer { max-width: 100%; padding: 0 14px; }
         }
         #distMap { width: 100%; height: 45vh; min-height: 320px; border-radius: 6px; }
+        #suburbFilter {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            margin: 14px 0 6px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        #suburbCount { text-align: center; font-size: 0.82em; color: #777; margin: 0 0 10px; }
         .suburb-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 6px 16px;
             margin: 16px 0;
+            max-height: 480px;
+            overflow-y: auto;
+            padding: 4px 2px;
+            border: 1px solid #eee;
+            border-radius: 6px;
         }
         .suburb-grid span { color: #333; }
+        .suburb-grid span.hidden { display: none; }
         .outage-cta {
             display: inline-block;
             background-color: #7f8c8d;
@@ -63,13 +80,799 @@
         <div id="distMap"></div>
 
         <h2 style="text-align:center;">Suburbs &amp; towns in the TasNetworks network area</h2>
-        <p style="text-align:center;">This is a representative list, not exhaustive &mdash; use the <a href="../index.html">interactive map</a> to check any specific address.</p>
-        <div class="suburb-grid">
-            <span>Burnie</span>
-            <span>Devonport</span>
-            <span>Hobart</span>
-            <span>Kingston</span>
-            <span>Launceston</span>
+        <p style="text-align:center;">789 suburbs and towns matched to TasNetworks from the current boundary data &mdash; or use the <a href="../index.html">interactive map</a> to check any specific address.</p>
+        <input type="text" id="suburbFilter" placeholder="Filter this list, e.g. type a suburb name..." autocomplete="off" />
+        <p id="suburbCount"></p>
+        <div class="suburb-grid" id="suburbGrid">
+            <span>ABBOTSHAM</span>
+            <span>ABELS BAY</span>
+            <span>ABERDEEN</span>
+            <span>ACACIA HILLS</span>
+            <span>ACTON</span>
+            <span>ACTON PARK</span>
+            <span>ADVENTURE BAY</span>
+            <span>AKAROA</span>
+            <span>ALANVALE</span>
+            <span>ALBERTON</span>
+            <span>ALBION HEIGHTS</span>
+            <span>ALCOMIE</span>
+            <span>ALLENS RIVULET</span>
+            <span>ALONNAH</span>
+            <span>AMBLESIDE</span>
+            <span>ANDOVER</span>
+            <span>ANSONS BAY</span>
+            <span>ANTILL PONDS</span>
+            <span>APOLLO BAY</span>
+            <span>APSLAWN</span>
+            <span>APSLEY</span>
+            <span>ARTHUR RIVER</span>
+            <span>ARTHURS LAKE</span>
+            <span>AUSTINS FERRY</span>
+            <span>AVOCA</span>
+            <span>BADEN</span>
+            <span>BADGER HEAD</span>
+            <span>BAGDAD</span>
+            <span>BAGDAD NORTH</span>
+            <span>BAKERS BEACH</span>
+            <span>BANCA</span>
+            <span>BANGOR</span>
+            <span>BARNES BAY</span>
+            <span>BARRETTA</span>
+            <span>BARRINGTON</span>
+            <span>BATHURST STREET PO</span>
+            <span>BATTERY POINT</span>
+            <span>BEACONSFIELD</span>
+            <span>BEAUTY POINT</span>
+            <span>BEECHFORD</span>
+            <span>BELL BAY</span>
+            <span>BELLERIVE</span>
+            <span>BELLINGHAM</span>
+            <span>BEN LOMOND</span>
+            <span>BERRIEDALE</span>
+            <span>BEULAH</span>
+            <span>BINALONG BAY</span>
+            <span>BIRCHS BAY</span>
+            <span>BIRRALEE</span>
+            <span>BISHOPSBOURNE</span>
+            <span>BLACK HILLS</span>
+            <span>BLACK RIVER</span>
+            <span>BLACKMANS BAY</span>
+            <span>BLACKSTONE HEIGHTS</span>
+            <span>BLACKWALL</span>
+            <span>BLACKWOOD CREEK</span>
+            <span>BLESSINGTON</span>
+            <span>BLUE ROCKS</span>
+            <span>BLUMONT</span>
+            <span>BOAT HARBOUR</span>
+            <span>BOAT HARBOUR BEACH</span>
+            <span>BONNET HILL</span>
+            <span>BOOBYALLA</span>
+            <span>BOOMER BAY</span>
+            <span>BOTHWELL</span>
+            <span>BOYER</span>
+            <span>BRACKNELL</span>
+            <span>BRADYS LAKE</span>
+            <span>BRANDUM</span>
+            <span>BRANXHOLM</span>
+            <span>BREADALBANE</span>
+            <span>BREAM CREEK</span>
+            <span>BREONA</span>
+            <span>BRIDGENORTH</span>
+            <span>BRIDGEWATER</span>
+            <span>BRIDPORT</span>
+            <span>BRIGHTON</span>
+            <span>BRITTONS SWAMP</span>
+            <span>BROADMARSH</span>
+            <span>BROADMEADOWS</span>
+            <span>BRONTE PARK</span>
+            <span>BROOKLYN</span>
+            <span>BROOKS BAY</span>
+            <span>BUCKLAND</span>
+            <span>BUNGAREE</span>
+            <span>BURNIE</span>
+            <span>BURNS CREEK</span>
+            <span>BUSHY PARK</span>
+            <span>BUTLERS GORGE</span>
+            <span>CAIRNS BAY</span>
+            <span>CALDER</span>
+            <span>CAMBRIDGE</span>
+            <span>CAMDALE</span>
+            <span>CAMENA</span>
+            <span>CAMPANIA</span>
+            <span>CAMPBELL TOWN</span>
+            <span>CAPE BARREN ISLAND</span>
+            <span>CAPE PILLAR</span>
+            <span>CAPE PORTLAND</span>
+            <span>CAPE RAOUL</span>
+            <span>CARLTON</span>
+            <span>CARLTON RIVER</span>
+            <span>CARRICK</span>
+            <span>CASEY</span>
+            <span>CASTLE FORBES BAY</span>
+            <span>CASTRA</span>
+            <span>CATAMARAN</span>
+            <span>CAVESIDE</span>
+            <span>CENTRAL PLATEAU</span>
+            <span>CETHANA</span>
+            <span>CHARLOTTE COVE</span>
+            <span>CHASM CREEK</span>
+            <span>CHIGWELL</span>
+            <span>CHRISTMAS HILLS</span>
+            <span>CHUDLEIGH</span>
+            <span>CLAREMONT</span>
+            <span>CLARENCE POINT</span>
+            <span>CLARENDON VALE</span>
+            <span>CLAUDE ROAD</span>
+            <span>CLEVELAND</span>
+            <span>CLIFTON BEACH</span>
+            <span>CLUAN</span>
+            <span>COLEBROOK</span>
+            <span>COLLINSVALE</span>
+            <span>CONARA</span>
+            <span>CONINGHAM</span>
+            <span>CONNELLYS MARSH</span>
+            <span>COOEE</span>
+            <span>CORINNA</span>
+            <span>CORNELIAN BAY</span>
+            <span>COUTA ROCKS</span>
+            <span>COWRIE POINT</span>
+            <span>CRABTREE</span>
+            <span>CRADLE MOUNTAIN</span>
+            <span>CRADOC</span>
+            <span>CRAMPS BAY</span>
+            <span>CRANBROOK</span>
+            <span>CRAYFISH CREEK</span>
+            <span>CREMORNE</span>
+            <span>CRESSY</span>
+            <span>CUCKOO</span>
+            <span>CUPRONA</span>
+            <span>CURRIE</span>
+            <span>CYGNET</span>
+            <span>DAIRY PLAINS</span>
+            <span>DAVIS</span>
+            <span>DEDDINGTON</span>
+            <span>DEE</span>
+            <span>DEEP BAY</span>
+            <span>DELORAINE</span>
+            <span>DENNES POINT</span>
+            <span>DERBY</span>
+            <span>DERWENT BRIDGE</span>
+            <span>DERWENT PARK</span>
+            <span>DETENTION</span>
+            <span>DEVIOT</span>
+            <span>DEVON HILLS</span>
+            <span>DEVONPORT</span>
+            <span>DILSTON</span>
+            <span>DOCTORS POINT</span>
+            <span>DOCTORS ROCKS</span>
+            <span>DODGES FERRY</span>
+            <span>DOLPHIN SANDS</span>
+            <span>DON</span>
+            <span>DOUGLAS-APSLEY</span>
+            <span>DOVER</span>
+            <span>DOWNLANDS</span>
+            <span>DOWSING POINT</span>
+            <span>DROMEDARY</span>
+            <span>DULCOT</span>
+            <span>DUNALLEY</span>
+            <span>DUNORLAN</span>
+            <span>DYNNYRNE</span>
+            <span>DYSART</span>
+            <span>EAGLEHAWK NECK</span>
+            <span>EAST CAM</span>
+            <span>EAST DEVONPORT</span>
+            <span>EAST LAUNCESTON</span>
+            <span>EAST RIDGLEY</span>
+            <span>EDDYSTONE</span>
+            <span>EDDYSTONE POINT</span>
+            <span>EDGCUMBE BEACH</span>
+            <span>EDITH CREEK</span>
+            <span>EGG LAGOON</span>
+            <span>EGGS AND BACON BAY</span>
+            <span>ELDERSLIE</span>
+            <span>ELECTRONA</span>
+            <span>ELIZABETH TOWN</span>
+            <span>ELLENDALE</span>
+            <span>ELLIOTT</span>
+            <span>ELPHIN</span>
+            <span>ELWICK</span>
+            <span>EMITA</span>
+            <span>EMU HEIGHTS</span>
+            <span>EPPING FOREST</span>
+            <span>ERRIBA</span>
+            <span>EUGENANA</span>
+            <span>EVANDALE</span>
+            <span>EXETER</span>
+            <span>EXTON</span>
+            <span>FENTONBURY</span>
+            <span>FERN TREE</span>
+            <span>FINGAL</span>
+            <span>FITZGERALD</span>
+            <span>FLAGSTAFF GULLY</span>
+            <span>FLINTSTONE</span>
+            <span>FLORENTINE</span>
+            <span>FLOWERDALE</span>
+            <span>FLOWERPOT</span>
+            <span>FLOWERY GULLY</span>
+            <span>FORCETT</span>
+            <span>FOREST</span>
+            <span>FORESTER</span>
+            <span>FORTESCUE</span>
+            <span>FORTH</span>
+            <span>FORTHSIDE</span>
+            <span>FRANKFORD</span>
+            <span>FRANKLIN</span>
+            <span>GAGEBROOK</span>
+            <span>GARDEN ISLAND CREEK</span>
+            <span>GARDNERS BAY</span>
+            <span>GAWLER</span>
+            <span>GEEVESTON</span>
+            <span>GEILSTON BAY</span>
+            <span>GEORGE TOWN</span>
+            <span>GLADSTONE</span>
+            <span>GLAZIERS BAY</span>
+            <span>GLEBE</span>
+            <span>GLEN DHU</span>
+            <span>GLEN HUON</span>
+            <span>GLENDEVIE</span>
+            <span>GLENFERN</span>
+            <span>GLENGARRY</span>
+            <span>GLENLUSK</span>
+            <span>GLENORA</span>
+            <span>GLENORCHY</span>
+            <span>GOLCONDA</span>
+            <span>GOLDEN VALLEY</span>
+            <span>GOODWOOD</span>
+            <span>GORDON</span>
+            <span>GORMANSTON</span>
+            <span>GOSHEN</span>
+            <span>GOULDS COUNTRY</span>
+            <span>GOWRIE PARK</span>
+            <span>GRANTON</span>
+            <span>GRANVILLE HARBOUR</span>
+            <span>GRASSTREE HILL</span>
+            <span>GRASSY</span>
+            <span>GRAVELLY BEACH</span>
+            <span>GREAT BAY</span>
+            <span>GREENS BEACH</span>
+            <span>GRETNA</span>
+            <span>GRINDELWALD</span>
+            <span>GROVE</span>
+            <span>GUILDFORD</span>
+            <span>GUNNS PLAINS</span>
+            <span>HADSPEN</span>
+            <span>HAGLEY</span>
+            <span>HAMILTON</span>
+            <span>HAMPSHIRE</span>
+            <span>HARFORD</span>
+            <span>HASTINGS</span>
+            <span>HAVENVIEW</span>
+            <span>HAWLEY BEACH</span>
+            <span>HAYES</span>
+            <span>HEARD ISLAND</span>
+            <span>HELLYER</span>
+            <span>HENRIETTA</span>
+            <span>HERDSMANS COVE</span>
+            <span>HERMITAGE</span>
+            <span>HERRICK</span>
+            <span>HEYBRIDGE</span>
+            <span>HIGHCLERE</span>
+            <span>HILLCREST</span>
+            <span>HILLWOOD</span>
+            <span>HOBART</span>
+            <span>HOLLOW TREE</span>
+            <span>HOLWELL</span>
+            <span>HONEYWOOD</span>
+            <span>HOWDEN</span>
+            <span>HOWRAH</span>
+            <span>HOWTH</span>
+            <span>HUNTER ISLAND</span>
+            <span>HUNTINGFIELD</span>
+            <span>HUON ISLAND</span>
+            <span>HUONVILLE</span>
+            <span>IDA BAY</span>
+            <span>ILFRAVILLE</span>
+            <span>INTERLAKEN</span>
+            <span>INVERESK</span>
+            <span>INVERMAY</span>
+            <span>IRISHTOWN</span>
+            <span>JACKEYS MARSH</span>
+            <span>JERICHO</span>
+            <span>JETSONVILLE</span>
+            <span>JUDBURY</span>
+            <span>KAMONA</span>
+            <span>KAOOTA</span>
+            <span>KARANJA</span>
+            <span>KAROOLA</span>
+            <span>KAYENA</span>
+            <span>KELLEVIE</span>
+            <span>KELSO</span>
+            <span>KEMPTON</span>
+            <span>KETTERING</span>
+            <span>KILLIECRANKIE</span>
+            <span>KILLORA</span>
+            <span>KIMBERLEY</span>
+            <span>KINDRED</span>
+            <span>KINGS MEADOWS</span>
+            <span>KINGSTON</span>
+            <span>KINGSTON BEACH</span>
+            <span>KOONYA</span>
+            <span>LACHLAN</span>
+            <span>LACKRANA</span>
+            <span>LADY BARRON</span>
+            <span>LAKE LEAKE</span>
+            <span>LAKE MARGARET</span>
+            <span>LAKE SORELL</span>
+            <span>LAKE ST CLAIR</span>
+            <span>LALLA</span>
+            <span>LANENA</span>
+            <span>LAPOINYA</span>
+            <span>LATROBE</span>
+            <span>LAUDERDALE</span>
+            <span>LAUNCESTON</span>
+            <span>LAWITTA</span>
+            <span>LEBRINA</span>
+            <span>LEEKA</span>
+            <span>LEFROY</span>
+            <span>LEGANA</span>
+            <span>LEGERWOOD</span>
+            <span>LEITH</span>
+            <span>LEMONT</span>
+            <span>LENAH VALLEY</span>
+            <span>LESLIE VALE</span>
+            <span>LEVENDALE</span>
+            <span>LEWISHAM</span>
+            <span>LIAWENEE</span>
+            <span>LIENA</span>
+            <span>LIETINNA</span>
+            <span>LIFFEY</span>
+            <span>LILEAH</span>
+            <span>LILLICO</span>
+            <span>LILYDALE</span>
+            <span>LINDISFARNE</span>
+            <span>LISLE</span>
+            <span>LITTLE PINE LAGOON</span>
+            <span>LITTLE SWANPORT</span>
+            <span>LOCCOTA</span>
+            <span>LOIRA</span>
+            <span>LONDON LAKES</span>
+            <span>LONG REACH</span>
+            <span>LONGFORD</span>
+            <span>LONGLEY</span>
+            <span>LONNAVALE</span>
+            <span>LOONGANA</span>
+            <span>LOORANA</span>
+            <span>LORINNA</span>
+            <span>LOTTAH</span>
+            <span>LOW HEAD</span>
+            <span>LOWER BARRINGTON</span>
+            <span>LOWER BEULAH</span>
+            <span>LOWER LONGLEY</span>
+            <span>LOWER MARSHES</span>
+            <span>LOWER SANDY BAY</span>
+            <span>LOWER SNUG</span>
+            <span>LOWER TURNERS MARSH</span>
+            <span>LOWER WATTLE GROVE</span>
+            <span>LOWER WILMOT</span>
+            <span>LOYETEA</span>
+            <span>LUCASTON</span>
+            <span>LUGHRATA</span>
+            <span>LUINA</span>
+            <span>LULWORTH</span>
+            <span>LUNAWANNA</span>
+            <span>LUNE RIVER</span>
+            <span>LUTANA</span>
+            <span>LYMINGTON</span>
+            <span>LYMWOOD</span>
+            <span>MACQUARIE</span>
+            <span>MACQUARIE HEADS</span>
+            <span>MACQUARIE ISLAND</span>
+            <span>MACQUARIE PLAINS</span>
+            <span>MAGRA</span>
+            <span>MALBINA</span>
+            <span>MANGALORE</span>
+            <span>MANGANA</span>
+            <span>MARGATE</span>
+            <span>MARIA ISLAND</span>
+            <span>MARION BAY</span>
+            <span>MARRAWAH</span>
+            <span>MATHINNA</span>
+            <span>MAWBANNA</span>
+            <span>MAWSON</span>
+            <span>MAYBERRY</span>
+            <span>MAYDENA</span>
+            <span>MAYFIELD</span>
+            <span>MCDONALD ISLANDS</span>
+            <span>MEADOWBANK</span>
+            <span>MEANDER</span>
+            <span>MELLA</span>
+            <span>MELROSE</span>
+            <span>MELTON MOWBRAY</span>
+            <span>MEMANA</span>
+            <span>MENGHA</span>
+            <span>MERSEY FOREST</span>
+            <span>MERSEYLEA</span>
+            <span>MEUNNA</span>
+            <span>MIANDETTA</span>
+            <span>MIDDLESEX</span>
+            <span>MIDDLETON</span>
+            <span>MIDWAY POINT</span>
+            <span>MIENA</span>
+            <span>MILABENA</span>
+            <span>MILLERS BLUFF</span>
+            <span>MOINA</span>
+            <span>MOLE CREEK</span>
+            <span>MOLESWORTH</span>
+            <span>MOLTEMA</span>
+            <span>MONTAGU</span>
+            <span>MONTAGU BAY</span>
+            <span>MONTANA</span>
+            <span>MONTELLO</span>
+            <span>MONTROSE</span>
+            <span>MONTUMANA</span>
+            <span>MOOGARA</span>
+            <span>MOONAH</span>
+            <span>MOOREVILLE</span>
+            <span>MOORINA</span>
+            <span>MOORLEAH</span>
+            <span>MORASS BAY</span>
+            <span>MORIARTY</span>
+            <span>MORNINGTON</span>
+            <span>MOUNT DIRECTION</span>
+            <span>MOUNT FIELD</span>
+            <span>MOUNT HICKS</span>
+            <span>MOUNT LLOYD</span>
+            <span>MOUNT NELSON</span>
+            <span>MOUNT ROLAND</span>
+            <span>MOUNT RUMNEY</span>
+            <span>MOUNT SEYMOUR</span>
+            <span>MOUNT STUART</span>
+            <span>MOUNT WILLIAM</span>
+            <span>MOUNTAIN RIVER</span>
+            <span>MOWBRAY</span>
+            <span>MOWBRAY HEIGHTS</span>
+            <span>MURDUNNA</span>
+            <span>MUSSELROE BAY</span>
+            <span>MYALLA</span>
+            <span>MYRTLE BANK</span>
+            <span>NABAGEENA</span>
+            <span>NABOWLA</span>
+            <span>NARACOOPA</span>
+            <span>NATIONAL PARK</span>
+            <span>NATONE</span>
+            <span>NEEDLES</span>
+            <span>NEIKA</span>
+            <span>NELSON BAY</span>
+            <span>NEW NORFOLK</span>
+            <span>NEW TOWN</span>
+            <span>NEWNHAM</span>
+            <span>NEWSTEAD</span>
+            <span>NICHOLLS RIVULET</span>
+            <span>NIERINNA</span>
+            <span>NIETTA</span>
+            <span>NILE</span>
+            <span>NOOK</span>
+            <span>NORTH BRUNY</span>
+            <span>NORTH HOBART</span>
+            <span>NORTH LILYDALE</span>
+            <span>NORTH MOTTON</span>
+            <span>NORTH SCOTTSDALE</span>
+            <span>NORTHDOWN</span>
+            <span>NORWOOD</span>
+            <span>NORWOOD AVENUE PO</span>
+            <span>NOTLEY HILLS</span>
+            <span>NOWHERE ELSE</span>
+            <span>NUBEENA</span>
+            <span>NUGARA</span>
+            <span>NUGENT</span>
+            <span>NUNAMARA</span>
+            <span>OAKDOWNS</span>
+            <span>OAKS</span>
+            <span>OATLANDS</span>
+            <span>OCEAN VISTA</span>
+            <span>OLD BEACH</span>
+            <span>OLDINA</span>
+            <span>OONAH</span>
+            <span>OPOSSUM BAY</span>
+            <span>ORFORD</span>
+            <span>ORIELTON</span>
+            <span>OSMASTON</span>
+            <span>OSTERLEY</span>
+            <span>OTAGO</span>
+            <span>OUSE</span>
+            <span>OYSTER COVE</span>
+            <span>PALANA</span>
+            <span>PALOONA</span>
+            <span>PARADISE</span>
+            <span>PARATTAH</span>
+            <span>PARK GROVE</span>
+            <span>PARKHAM</span>
+            <span>PARKLANDS</span>
+            <span>PARRAWE</span>
+            <span>PATERSONIA</span>
+            <span>PAWLEENA</span>
+            <span>PAWTELLA</span>
+            <span>PEARSHAPE</span>
+            <span>PEGARAH</span>
+            <span>PELHAM</span>
+            <span>PELVERATA</span>
+            <span>PENGUIN</span>
+            <span>PENNA</span>
+            <span>PERTH</span>
+            <span>PETCHEYS BAY</span>
+            <span>PIERSONS POINT</span>
+            <span>PIONEER</span>
+            <span>PIPERS BROOK</span>
+            <span>PIPERS RIVER</span>
+            <span>PLENTY</span>
+            <span>POATINA</span>
+            <span>POLICE POINT</span>
+            <span>PONTVILLE</span>
+            <span>PONTYPOOL</span>
+            <span>PORT ARTHUR</span>
+            <span>PORT HUON</span>
+            <span>PORT LATTA</span>
+            <span>PORT SORELL</span>
+            <span>POWRANNA</span>
+            <span>PREMAYDENA</span>
+            <span>PREOLENNA</span>
+            <span>PRESERVATION BAY</span>
+            <span>PRESTON</span>
+            <span>PRIMROSE SANDS</span>
+            <span>PROMISED LAND</span>
+            <span>PROSPECT</span>
+            <span>PROSPECT VALE</span>
+            <span>PUNCHBOWL</span>
+            <span>PYENGANA</span>
+            <span>QUAMBY BEND</span>
+            <span>QUAMBY BROOK</span>
+            <span>QUEENS DOMAIN</span>
+            <span>QUEENSTOWN</span>
+            <span>QUOIBA</span>
+            <span>RAILTON</span>
+            <span>RAMINEA</span>
+            <span>RANDALLS BAY</span>
+            <span>RANELAGH</span>
+            <span>RANGA</span>
+            <span>RAVENSWOOD</span>
+            <span>RECHERCHE</span>
+            <span>RED HILLS</span>
+            <span>REDPA</span>
+            <span>REEDY MARSH</span>
+            <span>REEKARA</span>
+            <span>RELBIA</span>
+            <span>RENISON BELL</span>
+            <span>RETREAT</span>
+            <span>REYNOLDS NECK</span>
+            <span>RHEBAN</span>
+            <span>RHYNDASTON</span>
+            <span>RIANA</span>
+            <span>RICHMOND</span>
+            <span>RIDGEWAY</span>
+            <span>RIDGLEY</span>
+            <span>RINGAROOMA</span>
+            <span>RISDON</span>
+            <span>RISDON VALE</span>
+            <span>RIVERSIDE</span>
+            <span>ROBBINS ISLAND</span>
+            <span>ROBIGANA</span>
+            <span>ROCHERLEA</span>
+            <span>ROCHES BEACH</span>
+            <span>ROCKY CAPE</span>
+            <span>ROCKY HILLS</span>
+            <span>ROGER RIVER</span>
+            <span>ROKEBY</span>
+            <span>ROLAND</span>
+            <span>ROMAINE</span>
+            <span>ROSE BAY</span>
+            <span>ROSEBERY</span>
+            <span>ROSEGARLAND</span>
+            <span>ROSETTA</span>
+            <span>ROSEVALE</span>
+            <span>ROSEVEARS</span>
+            <span>ROSNY</span>
+            <span>ROSNY PARK</span>
+            <span>ROSS</span>
+            <span>ROSSARDEN</span>
+            <span>ROUND HILL</span>
+            <span>ROWELLA</span>
+            <span>ROYAL GEORGE</span>
+            <span>RUNNYMEDE</span>
+            <span>RUSHY LAGOON</span>
+            <span>SALTWATER RIVER</span>
+            <span>SANDFLY</span>
+            <span>SANDFORD</span>
+            <span>SANDHILL</span>
+            <span>SANDY BAY</span>
+            <span>SASSAFRAS</span>
+            <span>SAVAGE RIVER</span>
+            <span>SCOPUS</span>
+            <span>SCOTCHTOWN</span>
+            <span>SCOTTSDALE</span>
+            <span>SEA ELEPHANT</span>
+            <span>SEABROOK</span>
+            <span>SELBOURNE</span>
+            <span>SEVEN MILE BEACH</span>
+            <span>SHANNON</span>
+            <span>SHEARWATER</span>
+            <span>SHEFFIELD</span>
+            <span>SHOREWELL PARK</span>
+            <span>SIDMOUTH</span>
+            <span>SIMPSONS BAY</span>
+            <span>SISTERS BEACH</span>
+            <span>SISTERS CREEK</span>
+            <span>SLOPING MAIN</span>
+            <span>SMITHTON</span>
+            <span>SNUG</span>
+            <span>SOMERSET</span>
+            <span>SORELL</span>
+            <span>SORELL CREEK</span>
+            <span>SOUTH ARM</span>
+            <span>SOUTH BRUNY</span>
+            <span>SOUTH BURNIE</span>
+            <span>SOUTH FOREST</span>
+            <span>SOUTH HOBART</span>
+            <span>SOUTH LAUNCESTON</span>
+            <span>SOUTH MOUNT CAMERON</span>
+            <span>SOUTH NIETTA</span>
+            <span>SOUTH PRESTON</span>
+            <span>SOUTH RIANA</span>
+            <span>SOUTH SPREYTON</span>
+            <span>SOUTH SPRINGFIELD</span>
+            <span>SOUTHPORT</span>
+            <span>SOUTHPORT LAGOON</span>
+            <span>SPALFORD</span>
+            <span>SPRENT</span>
+            <span>SPREYTON</span>
+            <span>SPRING BEACH</span>
+            <span>SPRINGFIELD</span>
+            <span>SQUEAKING POINT</span>
+            <span>ST HELENS</span>
+            <span>ST LEONARDS</span>
+            <span>STANLEY</span>
+            <span>STAVERTON</span>
+            <span>STEPPES</span>
+            <span>STIEGLITZ</span>
+            <span>STONEHENGE</span>
+            <span>STONOR</span>
+            <span>STONY HEAD</span>
+            <span>STONY RISE</span>
+            <span>STOODLEY</span>
+            <span>STORMLEA</span>
+            <span>STORYS CREEK</span>
+            <span>STOWPORT</span>
+            <span>STRAHAN</span>
+            <span>STRATHBLANE</span>
+            <span>STRICKLAND</span>
+            <span>STRZELECKI</span>
+            <span>STYX</span>
+            <span>SULPHUR CREEK</span>
+            <span>SUMMERHILL</span>
+            <span>SUNNYSIDE</span>
+            <span>SURGES BAY</span>
+            <span>SURPRISE BAY</span>
+            <span>SURVEYORS BAY</span>
+            <span>SWAN BAY</span>
+            <span>SWAN POINT</span>
+            <span>SWANSEA</span>
+            <span>SWANSTON</span>
+            <span>TABLE CAPE</span>
+            <span>TAKONE</span>
+            <span>TALAWA</span>
+            <span>TARANNA</span>
+            <span>TARGA</span>
+            <span>TARLETON</span>
+            <span>TAROONA</span>
+            <span>TARRALEAH</span>
+            <span>TASMAN ISLAND</span>
+            <span>TAYENE</span>
+            <span>TEA TREE</span>
+            <span>TELITA</span>
+            <span>TEMMA</span>
+            <span>TEWKESBURY</span>
+            <span>THE GARDENS</span>
+            <span>THIRLSTANE</span>
+            <span>THREE HUMMOCK ISLAND</span>
+            <span>TIBERIAS</span>
+            <span>TINDERBOX</span>
+            <span>TODS CORNER</span>
+            <span>TOGARI</span>
+            <span>TOIBERRY</span>
+            <span>TOLMANS HILL</span>
+            <span>TOMAHAWK</span>
+            <span>TONGANAH</span>
+            <span>TOOMS LAKE</span>
+            <span>TRANMERE</span>
+            <span>TRAVELLERS REST</span>
+            <span>TRENAH</span>
+            <span>TREVALLYN</span>
+            <span>TRIABUNNA</span>
+            <span>TRIAL HARBOUR</span>
+            <span>TROWUTTA</span>
+            <span>TUGRAH</span>
+            <span>TULENDEENA</span>
+            <span>TULLAH</span>
+            <span>TUNBRIDGE</span>
+            <span>TUNNACK</span>
+            <span>TUNNEL</span>
+            <span>TURNERS BEACH</span>
+            <span>TURNERS MARSH</span>
+            <span>TYENNA</span>
+            <span>ULVERSTONE</span>
+            <span>UNDERWOOD</span>
+            <span>UNIVERSITY OF TASMANIA</span>
+            <span>UPPER BLESSINGTON</span>
+            <span>UPPER BURNIE</span>
+            <span>UPPER CASTRA</span>
+            <span>UPPER ESK</span>
+            <span>UPPER NATONE</span>
+            <span>UPPER STOWPORT</span>
+            <span>UPPER WOODSTOCK</span>
+            <span>UXBRIDGE</span>
+            <span>VERONA SANDS</span>
+            <span>VICTORIA VALLEY</span>
+            <span>WADDAMANA</span>
+            <span>WALLS OF JERUSALEM</span>
+            <span>WARATAH</span>
+            <span>WARRANE</span>
+            <span>WARRENTINNA</span>
+            <span>WATERHOUSE</span>
+            <span>WATERLOO</span>
+            <span>WATTLE GROVE</span>
+            <span>WATTLE HILL</span>
+            <span>WAVERLEY</span>
+            <span>WAYATINAH</span>
+            <span>WEEGENA</span>
+            <span>WEETAH</span>
+            <span>WELDBOROUGH</span>
+            <span>WELLINGTON PARK</span>
+            <span>WESLEY VALE</span>
+            <span>WEST DEVONPORT</span>
+            <span>WEST HOBART</span>
+            <span>WEST KENTISH</span>
+            <span>WEST LAUNCESTON</span>
+            <span>WEST MONTAGU</span>
+            <span>WEST MOONAH</span>
+            <span>WEST MOOREVILLE</span>
+            <span>WEST PINE</span>
+            <span>WEST RIDGLEY</span>
+            <span>WEST SCOTTSDALE</span>
+            <span>WEST TAKONE</span>
+            <span>WEST ULVERSTONE</span>
+            <span>WESTBURY</span>
+            <span>WESTERN CREEK</span>
+            <span>WESTERN JUNCTION</span>
+            <span>WESTERWAY</span>
+            <span>WESTWOOD</span>
+            <span>WEYMOUTH</span>
+            <span>WHITE BEACH</span>
+            <span>WHITE HILLS</span>
+            <span>WHITEFOORD</span>
+            <span>WHITEMARK</span>
+            <span>WHITEMORE</span>
+            <span>WICKHAM</span>
+            <span>WILBURVILLE</span>
+            <span>WILMOT</span>
+            <span>WILTSHIRE</span>
+            <span>WINDERMERE</span>
+            <span>WINGAROO</span>
+            <span>WINKLEIGH</span>
+            <span>WINNALEAH</span>
+            <span>WIVENHOE</span>
+            <span>WOODBRIDGE</span>
+            <span>WOODBURY</span>
+            <span>WOODSDALE</span>
+            <span>WOODSTOCK</span>
+            <span>WOOLNORTH</span>
+            <span>WYENA</span>
+            <span>WYNYARD</span>
+            <span>YAMBACOONA</span>
+            <span>YARRA CREEK</span>
+            <span>YOLLA</span>
+            <span>YORK PLAINS</span>
+            <span>YORK TOWN</span>
+            <span>YOUNGTOWN</span>
+            <span>ZEEHAN</span>
         </div>
 
         <h2 style="text-align:center;">Frequently asked questions</h2>
@@ -123,6 +926,28 @@
                 map.setView([-25.5, 134], 4);
             }
         }).catch(() => map.setView([-25.5, 134], 4));
+
+        // ---------- Suburb list filter (pure client-side, no backend) ----------
+        const filterInput = document.getElementById('suburbFilter');
+        const suburbGrid = document.getElementById('suburbGrid');
+        const suburbSpans = Array.from(suburbGrid.querySelectorAll('span'));
+        const countEl = document.getElementById('suburbCount');
+
+        function updateCount() {
+            const visible = suburbSpans.filter(s => !s.classList.contains('hidden')).length;
+            countEl.textContent = filterInput.value.trim()
+                ? `Showing ${visible} of ${suburbSpans.length}`
+                : '';
+        }
+
+        filterInput.addEventListener('input', () => {
+            const q = filterInput.value.trim().toLowerCase();
+            suburbSpans.forEach(s => {
+                const match = !q || s.textContent.toLowerCase().includes(q);
+                s.classList.toggle('hidden', !match);
+            });
+            updateCount();
+        });
     </script>
 </body>
 

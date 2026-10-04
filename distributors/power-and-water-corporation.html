@@ -16,13 +16,30 @@
             .pagecontainer { max-width: 100%; padding: 0 14px; }
         }
         #distMap { width: 100%; height: 45vh; min-height: 320px; border-radius: 6px; }
+        #suburbFilter {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            margin: 14px 0 6px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        #suburbCount { text-align: center; font-size: 0.82em; color: #777; margin: 0 0 10px; }
         .suburb-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 6px 16px;
             margin: 16px 0;
+            max-height: 480px;
+            overflow-y: auto;
+            padding: 4px 2px;
+            border: 1px solid #eee;
+            border-radius: 6px;
         }
         .suburb-grid span { color: #333; }
+        .suburb-grid span.hidden { display: none; }
         .outage-cta {
             display: inline-block;
             background-color: #8e44ad;
@@ -63,14 +80,423 @@
         <div id="distMap"></div>
 
         <h2 style="text-align:center;">Suburbs &amp; towns in the Power and Water Corporation network area</h2>
-        <p style="text-align:center;">This is a representative list, not exhaustive &mdash; use the <a href="../index.html">interactive map</a> to check any specific address.</p>
-        <div class="suburb-grid">
-            <span>Alice Springs</span>
-            <span>Darwin</span>
-            <span>Katherine</span>
-            <span>Nhulunbuy</span>
-            <span>Palmerston</span>
-            <span>Tennant Creek</span>
+        <p style="text-align:center;">413 suburbs and towns matched to Power and Water Corporation from the current boundary data &mdash; or use the <a href="../index.html">interactive map</a> to check any specific address.</p>
+        <input type="text" id="suburbFilter" placeholder="Filter this list, e.g. type a suburb name..." autocomplete="off" />
+        <p id="suburbCount"></p>
+        <div class="suburb-grid" id="suburbGrid">
+            <span>ACACIA HILLS</span>
+            <span>AHERRENGE</span>
+            <span>ALAWA</span>
+            <span>ALEXANDRIA</span>
+            <span>ALI CURUNG</span>
+            <span>ALICE SPRINGS</span>
+            <span>ALPURRURULAM</span>
+            <span>ALROY</span>
+            <span>ALYANGULA</span>
+            <span>AMATA</span>
+            <span>AMOONGUNA</span>
+            <span>AMPILATWATJA</span>
+            <span>ANANGU PITJANTJATJARA YANKUNYTJATJARA</span>
+            <span>ANATYE</span>
+            <span>ANGURUGU</span>
+            <span>ANINDILYAKWA</span>
+            <span>ANMATJERE</span>
+            <span>ANNIE RIVER</span>
+            <span>ANTEWENEGERRDE</span>
+            <span>ANTHONYS LAGOON</span>
+            <span>ANULA</span>
+            <span>ARALUEN</span>
+            <span>ARCHER</span>
+            <span>AREYONGA</span>
+            <span>ARNOLD</span>
+            <span>ARUMBERA</span>
+            <span>ATITJERE</span>
+            <span>AVON DOWNS</span>
+            <span>AYERS ROCK</span>
+            <span>BAGOT</span>
+            <span>BAINES</span>
+            <span>BAKEWELL</span>
+            <span>BARKLY</span>
+            <span>BARROW CREEK</span>
+            <span>BARUNGA</span>
+            <span>BATHURST ISLAND</span>
+            <span>BAYVIEW</span>
+            <span>BEES CREEK</span>
+            <span>BELLAMACK</span>
+            <span>BELYUEN</span>
+            <span>BESWICK</span>
+            <span>BESWICK CREEK</span>
+            <span>BINJARI</span>
+            <span>BIRDUM</span>
+            <span>BLACK JUNGLE</span>
+            <span>BLACKMORE</span>
+            <span>BORDER STORE</span>
+            <span>BORROLOOLA</span>
+            <span>BRADSHAW</span>
+            <span>BRAITLING</span>
+            <span>BREAKAWAY</span>
+            <span>BRINKIN</span>
+            <span>BRUNETTE DOWNS</span>
+            <span>BUCHANAN</span>
+            <span>BUCKINGHAM</span>
+            <span>BUFFALO CREEK</span>
+            <span>BULMAN WEEMOL</span>
+            <span>BURRUNDIE</span>
+            <span>BURT PLAIN</span>
+            <span>BUSHY PARK</span>
+            <span>BYNOE</span>
+            <span>BYNOE HARBOUR</span>
+            <span>CALVERT</span>
+            <span>CAMBRIDGE GULF</span>
+            <span>CAMP CREEK</span>
+            <span>CANTEEN CREEK</span>
+            <span>CARRANDOTTA</span>
+            <span>CASUARINA</span>
+            <span>CHANNEL ISLAND</span>
+            <span>CHARLES DARWIN</span>
+            <span>CHARLOTTE</span>
+            <span>CHILLA WELL</span>
+            <span>CICCONE</span>
+            <span>CLARAVALE</span>
+            <span>COBOURG</span>
+            <span>COCONUT GROVE</span>
+            <span>COLLETT CREEK</span>
+            <span>CONNELLAN</span>
+            <span>COOLALINGA</span>
+            <span>COOMALIE CREEK</span>
+            <span>COONAWARRA</span>
+            <span>COSSACK</span>
+            <span>COSTELLO</span>
+            <span>COX PENINSULA</span>
+            <span>CRESSWELL DOWNS</span>
+            <span>CRESWELL</span>
+            <span>CROKER ISLAND</span>
+            <span>CULLEN BAY</span>
+            <span>DAGURAGU</span>
+            <span>DAJARRA</span>
+            <span>DALY</span>
+            <span>DALY RIVER</span>
+            <span>DALY WATERS</span>
+            <span>DARWIN DC</span>
+            <span>DARWIN INTERNATIONAL AIRPORT</span>
+            <span>DARWIN MC</span>
+            <span>DARWIN RIVER DAM</span>
+            <span>DAVENPORT</span>
+            <span>DELAMERE</span>
+            <span>DELISSAVILLE</span>
+            <span>DESERT SPRINGS</span>
+            <span>DOCKER RIVER</span>
+            <span>DOUGLAS-DALY</span>
+            <span>DRIVER</span>
+            <span>DUCHESS</span>
+            <span>DUNMARRA</span>
+            <span>DURACK</span>
+            <span>DURACK</span>
+            <span>EAST ARM</span>
+            <span>EAST ARNHEM</span>
+            <span>EAST POINT</span>
+            <span>EAST SIDE</span>
+            <span>EATON</span>
+            <span>EDITH</span>
+            <span>EDITH RIVER</span>
+            <span>ELLIOTT</span>
+            <span>ELRUNDIE</span>
+            <span>ELSEY</span>
+            <span>ELSEY STATION</span>
+            <span>EMUNGALAN</span>
+            <span>ENGAWALA</span>
+            <span>ERLDUNDA</span>
+            <span>ERNABELLA</span>
+            <span>EVA VALLEY</span>
+            <span>FANNIE BAY</span>
+            <span>FARRAR</span>
+            <span>FIELDING</span>
+            <span>FINKE</span>
+            <span>FINNISS VALLEY</span>
+            <span>FISHER</span>
+            <span>FLEMING</span>
+            <span>FLORINA</span>
+            <span>FLY CREEK</span>
+            <span>FLYING FOX</span>
+            <span>FLYNN</span>
+            <span>FREDS PASS</span>
+            <span>FREGON</span>
+            <span>GALIWINKU</span>
+            <span>GAPUWIYAK</span>
+            <span>GEORGINA</span>
+            <span>GHAN</span>
+            <span>GIBB</span>
+            <span>GIBSON DESERT NORTH</span>
+            <span>GILLEN</span>
+            <span>GIRRAWEEN</span>
+            <span>GLYDE POINT</span>
+            <span>GOULBOURN ISLAND</span>
+            <span>GOULBURN ISLAND</span>
+            <span>GRAY</span>
+            <span>GREGORY</span>
+            <span>GULUNG MARDRULK</span>
+            <span>GUNBALANYA</span>
+            <span>GUNN</span>
+            <span>GUNN POINT</span>
+            <span>GUNPOWDER</span>
+            <span>GUNYANGARA</span>
+            <span>GURINDJI</span>
+            <span>HAASTS BLUFF</span>
+            <span>HALE</span>
+            <span>HART</span>
+            <span>HART RANGE</span>
+            <span>HAYES CREEK</span>
+            <span>HEALY</span>
+            <span>HEAVITREE GAP CPA</span>
+            <span>HELEN SPRINGS</span>
+            <span>HELEN SPRINGS STATION</span>
+            <span>HERBERT</span>
+            <span>HERMANNSBURG</span>
+            <span>HIDDEN VALLEY</span>
+            <span>HOLMES</span>
+            <span>HOLTZE</span>
+            <span>HOTHAM</span>
+            <span>HUGH</span>
+            <span>HUGHES</span>
+            <span>HUMPTY DOO</span>
+            <span>ILPARPA</span>
+            <span>IMAMPA</span>
+            <span>IMANPA</span>
+            <span>INDULKANA</span>
+            <span>ININTI STORE</span>
+            <span>IRLPME</span>
+            <span>JAY CREEK</span>
+            <span>JILKMINGGAN</span>
+            <span>JINGILI</span>
+            <span>JOHNSTON</span>
+            <span>KAKADU</span>
+            <span>KALKADOON</span>
+            <span>KALKARINDJI</span>
+            <span>KALKARINGI</span>
+            <span>KALTUKATJARA</span>
+            <span>KARAMA</span>
+            <span>KATHERINE</span>
+            <span>KATHERINE EAST</span>
+            <span>KATHERINE SOUTH</span>
+            <span>KILGARIFF</span>
+            <span>KING ASH BAY</span>
+            <span>KINGS CREEK STATION</span>
+            <span>KINTORE</span>
+            <span>KOOLPINYAH</span>
+            <span>KULGERA</span>
+            <span>KUNPARRKA</span>
+            <span>KUNUNURRA</span>
+            <span>LAJAMANU</span>
+            <span>LAKE ARGYLE</span>
+            <span>LAKE BENNETT</span>
+            <span>LAKE MACKAY</span>
+            <span>LAMBELLS LAGOON</span>
+            <span>LANSDOWNE</span>
+            <span>LANSKEY</span>
+            <span>LARAMBA</span>
+            <span>LARAPINTA</span>
+            <span>LARRAKEYAH</span>
+            <span>LARRIMAH</span>
+            <span>LAWN HILL</span>
+            <span>LEANYER</span>
+            <span>LEE POINT</span>
+            <span>LIMMEN</span>
+            <span>LITCHFIELD PARK</span>
+            <span>LIVINGSTONE</span>
+            <span>LLOYD CREEK</span>
+            <span>LUDMILLA</span>
+            <span>LYONS</span>
+            <span>MACDONNELL RANGE</span>
+            <span>MALAK</span>
+            <span>MANBULLOO</span>
+            <span>MANDORAH</span>
+            <span>MANINGRIDA</span>
+            <span>MANTON</span>
+            <span>MAPURU</span>
+            <span>MARANBOY</span>
+            <span>MARANUNGA</span>
+            <span>MARGARET RIVER</span>
+            <span>MARLOW LAGOON</span>
+            <span>MARRAKAI</span>
+            <span>MARRARA</span>
+            <span>MARY KATHLEEN</span>
+            <span>MATARANKA</span>
+            <span>MCARTHUR</span>
+            <span>MCMINNS LAGOON</span>
+            <span>MENZIES</span>
+            <span>MEREENIE</span>
+            <span>MICA CREEK</span>
+            <span>MICKET CREEK</span>
+            <span>MICKETT CREEK</span>
+            <span>MIDDLE POINT</span>
+            <span>MILES END</span>
+            <span>MILIKAPITI</span>
+            <span>MILINGIMBI</span>
+            <span>MILLNER</span>
+            <span>MILLWOOD</span>
+            <span>MILYAKBURRA</span>
+            <span>MINIYERI</span>
+            <span>MINIYERRI</span>
+            <span>MINJILANG</span>
+            <span>MITCHELL</span>
+            <span>MOIL</span>
+            <span>MORNINGTON</span>
+            <span>MOULDEN</span>
+            <span>MOUNT BUNDEY</span>
+            <span>MOUNT JOHNS</span>
+            <span>MOUNT LIEBIG</span>
+            <span>MOUNT ZEIL</span>
+            <span>MUCKATY STATION</span>
+            <span>MUIRHEAD</span>
+            <span>MULGA BORE</span>
+            <span>MURPUTJA HOMELANDS</span>
+            <span>MURRUMUJUK</span>
+            <span>MUTITJULU</span>
+            <span>NAKARA</span>
+            <span>NAMATJIRA</span>
+            <span>NAPPERBY STATION</span>
+            <span>NAUIYU</span>
+            <span>NEMARLUK</span>
+            <span>NEWCASTLE WATERS</span>
+            <span>NGANMARRIYANGA</span>
+            <span>NGUIU</span>
+            <span>NGUKURR</span>
+            <span>NICHOLSON</span>
+            <span>NIGHTCLIFF</span>
+            <span>NITMILUK</span>
+            <span>NOONAMAH</span>
+            <span>NORTHLAKES</span>
+            <span>NUMBULWAR</span>
+            <span>NUMBURINDI</span>
+            <span>NUTWOOD DOWNS</span>
+            <span>NYIRRIPI</span>
+            <span>OENPELLI</span>
+            <span>OSBORNE MINE</span>
+            <span>PALMERSTON</span>
+            <span>PAMAYU</span>
+            <span>PAPUNYA</span>
+            <span>PARAP</span>
+            <span>PATJARR</span>
+            <span>PELLEW ISLANDS</span>
+            <span>PEPPIMENARTI</span>
+            <span>PETERMANN</span>
+            <span>PHILLIP CREEK STATION</span>
+            <span>PIGEON HOLE</span>
+            <span>PINELANDS</span>
+            <span>PIONEER</span>
+            <span>PIRLANGIMPI</span>
+            <span>PITJANTJATJARA HOMELANDS</span>
+            <span>PITURIE</span>
+            <span>POINT STEPHENS</span>
+            <span>POINT STUART</span>
+            <span>PULARUMPI</span>
+            <span>PULUMPA</span>
+            <span>RAAF BASE DARWIN</span>
+            <span>RAKULA</span>
+            <span>RAMINGINING</span>
+            <span>RANKEN</span>
+            <span>RAPID CREEK</span>
+            <span>RENNER SPRINGS</span>
+            <span>ROBIN FALLS</span>
+            <span>ROBINSON RIVER</span>
+            <span>ROSEBERY</span>
+            <span>ROSEBERY HEIGHTS</span>
+            <span>ROSS</span>
+            <span>RUM JUNGLE</span>
+            <span>RYAN</span>
+            <span>SADADEEN</span>
+            <span>SANDERSON</span>
+            <span>SANDOVER</span>
+            <span>SANDPALMS ROADHOUSE</span>
+            <span>SANTA TERESA</span>
+            <span>SHOAL BAY</span>
+            <span>SIMPSON</span>
+            <span>SOLDIERS HILL</span>
+            <span>SOUTHPORT</span>
+            <span>SPREADBOROUGH</span>
+            <span>STAPLETON</span>
+            <span>STUART</span>
+            <span>STUART PARK</span>
+            <span>STURT PLATEAU</span>
+            <span>SUNSET</span>
+            <span>TABLELANDS</span>
+            <span>TANAMI</span>
+            <span>TANAMI EAST</span>
+            <span>TARA</span>
+            <span>TELEGRAPH STATION</span>
+            <span>TENNANT CREEK</span>
+            <span>THAMARRURR</span>
+            <span>THANGKENHARENGE</span>
+            <span>THE GAP</span>
+            <span>THE GARDENS</span>
+            <span>THE MONUMENT</span>
+            <span>THE NARROWS</span>
+            <span>THREE WAYS</span>
+            <span>TI TREE</span>
+            <span>TIMBER CREEK</span>
+            <span>TINDAL</span>
+            <span>TINDAL RAAF</span>
+            <span>TIPPERARY</span>
+            <span>TITJIKALA</span>
+            <span>TIVENDALE</span>
+            <span>TIWI</span>
+            <span>TIWI ISLANDS</span>
+            <span>TOP SPRINGS</span>
+            <span>TORTILLA FLATS</span>
+            <span>TOWNVIEW</span>
+            <span>TUMBLING WATERS</span>
+            <span>ULURU</span>
+            <span>UMBAKUMBA</span>
+            <span>UMPANGARA</span>
+            <span>UNDOOLYA</span>
+            <span>URALLA</span>
+            <span>URAPUNTJA</span>
+            <span>VENN</span>
+            <span>VERNON ISLANDS</span>
+            <span>VICTORIA RIVER</span>
+            <span>VICTORIA RIVER DOWNS</span>
+            <span>VIRGINIA</span>
+            <span>WADEYE</span>
+            <span>WAGAIT BEACH</span>
+            <span>WAGAMAN</span>
+            <span>WAK WAK</span>
+            <span>WALLACE ROCKHOLE</span>
+            <span>WANARN</span>
+            <span>WANGURI</span>
+            <span>WARAKURNA</span>
+            <span>WARMUN</span>
+            <span>WARREGO</span>
+            <span>WARRUWI</span>
+            <span>WARUMUNGU</span>
+            <span>WAVE HILL</span>
+            <span>WAVERLEY</span>
+            <span>WEDDELL</span>
+            <span>WEST ARNHEM</span>
+            <span>WHITE GUMS</span>
+            <span>WICKHAM</span>
+            <span>WILLOWRA</span>
+            <span>WILORA</span>
+            <span>WILTON</span>
+            <span>WINGELLINA</span>
+            <span>WINNELLIE</span>
+            <span>WINSTON</span>
+            <span>WISHART</span>
+            <span>WOLLOGORANG STATION</span>
+            <span>WOODLEIGH GARDENS</span>
+            <span>WOODROFFE</span>
+            <span>WOOLANING</span>
+            <span>WOOLNER</span>
+            <span>WULAGI</span>
+            <span>WURRUMIYANGA</span>
+            <span>WUTUNUGURRA</span>
+            <span>WYCLIFFE WELL</span>
+            <span>YARRALIN</span>
+            <span>YARRAWONGA</span>
+            <span>YIRRKALA</span>
+            <span>YUELAMU</span>
+            <span>YUENDUMU</span>
+            <span>YULARA</span>
+            <span>ZUCCOLI</span>
         </div>
 
         <h2 style="text-align:center;">Frequently asked questions</h2>
@@ -124,6 +550,28 @@
                 map.setView([-25.5, 134], 4);
             }
         }).catch(() => map.setView([-25.5, 134], 4));
+
+        // ---------- Suburb list filter (pure client-side, no backend) ----------
+        const filterInput = document.getElementById('suburbFilter');
+        const suburbGrid = document.getElementById('suburbGrid');
+        const suburbSpans = Array.from(suburbGrid.querySelectorAll('span'));
+        const countEl = document.getElementById('suburbCount');
+
+        function updateCount() {
+            const visible = suburbSpans.filter(s => !s.classList.contains('hidden')).length;
+            countEl.textContent = filterInput.value.trim()
+                ? `Showing ${visible} of ${suburbSpans.length}`
+                : '';
+        }
+
+        filterInput.addEventListener('input', () => {
+            const q = filterInput.value.trim().toLowerCase();
+            suburbSpans.forEach(s => {
+                const match = !q || s.textContent.toLowerCase().includes(q);
+                s.classList.toggle('hidden', !match);
+            });
+            updateCount();
+        });
     </script>
 </body>
 
