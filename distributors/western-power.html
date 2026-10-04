@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Western Power Coverage Area &amp; Outage Map | findmyauspowerdisty.com</title>
+    <meta name="description" content="Suburbs and towns serviced by Western Power in WA. Check your area and report an outage directly to Western Power." />
+    <link rel="canonical" href="https://findmyauspowerdisty.com/distributors/western-power.html" />
+    <link rel="icon" type="image/x-icon" href="../images/logo-findmyauspowerdisty.ico">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        #distMap { width: 100%; height: 45vh; min-height: 320px; border-radius: 6px; }
+        .suburb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 6px 16px;
+            margin: 16px 0;
+        }
+        .suburb-grid span { color: #333; }
+        .outage-cta {
+            display: inline-block;
+            background-color: #2980b9;
+            color: white;
+            padding: 14px 28px;
+            text-decoration: none;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .outage-cta:hover { opacity: 0.85; }
+        .faq-item { margin: 14px 0; }
+        .faq-item dt { font-weight: bold; margin-bottom: 4px; }
+        .breadcrumb { text-align: center; font-size: 0.85em; margin: 10px 0; color: #666; }
+        .breadcrumb a { color: #666; }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <img style="display: inline" id="Header-logo" src="../images/logo-findmyauspowerdisty.png" alt="FMAPD Logo" width="10%" height="10%" />
+        <div style="display: inline">
+            <p id="title">Find My Aussie Power Disty</p>
+        </div>
+    </div>
+    <hr>
+
+    <div class="pagecontainer">
+        <p class="breadcrumb"><a href="../index.html">&larr; Back to findmyauspowerdisty.com</a></p>
+
+        <h1 style="text-align:center;">Western Power &mdash; Coverage Area &amp; Outage Map</h1>
+        <p style="text-align:center;">Western Power is the electricity distributor for the following area of WA. If your power is out, report it directly to Western Power using the button below &mdash; findmyauspowerdisty.com is an independent lookup tool and is not affiliated with Western Power.</p>
+
+        <p style="text-align:center;">
+            <a class="outage-cta" href="https://www.westernpower.com.au/faults-outages/power-outages/" target="_blank" rel="noopener">Report an outage to Western Power &rarr;</a>
+        </p>
+
+        <div id="distMap"></div>
+
+        <h2 style="text-align:center;">Suburbs &amp; towns in the Western Power network area</h2>
+        <p style="text-align:center;">This is a representative list, not exhaustive &mdash; use the <a href="../index.html">interactive map</a> to check any specific address.</p>
+        <div class="suburb-grid">
+            <span>Albany</span>
+            <span>Armadale</span>
+            <span>Bremer Bay</span>
+            <span>Bunbury</span>
+            <span>Busselton</span>
+            <span>Denmark</span>
+            <span>Fremantle</span>
+            <span>Geraldton</span>
+            <span>Joondalup</span>
+            <span>Kalgoorlie</span>
+            <span>Mandurah</span>
+            <span>Margaret River</span>
+            <span>Marvel Loch</span>
+            <span>Merredin</span>
+            <span>Midland</span>
+            <span>Northam</span>
+            <span>Perth CBD</span>
+            <span>Ravensthorpe</span>
+            <span>Rockingham</span>
+            <span>York</span>
+        </div>
+
+        <h2 style="text-align:center;">Frequently asked questions</h2>
+        <dl>
+            <div class="faq-item">
+                <dt>How do I report a power outage with Western Power?</dt>
+                <dd>Use the outage link above, or call Western Power's outage line directly. Western Power is the network operator (the poles and wires) &mdash; they handle outages and faults, not your electricity retailer/biller.</dd>
+            </div>
+            <div class="faq-item">
+                <dt>Is Western Power the same as my electricity retailer?</dt>
+                <dd>No. Western Power owns and maintains the physical power lines in this area. Your retailer (who sends your bill) can be any company operating in WA &mdash; but outages and faults are always handled by the local distributor, Western Power.</dd>
+            </div>
+            <div class="faq-item">
+                <dt>What area does Western Power cover?</dt>
+                <dd>Western Power services the WA suburbs and towns listed above. Boundaries shown on the map are approximate &mdash; always confirm with Western Power directly for an exact address.</dd>
+            </div>
+        </dl>
+
+        <p class="disclaimer" style="text-align:center;">Boundaries are hand-drawn approximations for general guidance only &mdash; not official network maps. Always confirm with your distributor for exact coverage.</p>
+    </div>
+
+    <hr>
+    <div class="footer">
+        <p><a href="../index.html">&larr; Back to findmyauspowerdisty.com</a></p>
+        <p> Developed by Jards from <a href="https://jardsit.net/">jardsit.net</a> </p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script>
+        const map = L.map('distMap');
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, HERE, Garmin, USGS, Intermap',
+            maxZoom: 19
+        }).addTo(map);
+
+        const STATE_FILES = ['nt', 'sa', 'tas', 'wa', 'qld', 'nsw-act', 'vic'];
+        Promise.allSettled(
+            STATE_FILES.map(s => fetch(`../boundaries/distributors-${s}.geojson`).then(r => r.json()))
+        ).then(results => {
+            const allFeatures = results
+                .filter(r => r.status === 'fulfilled')
+                .flatMap(r => r.value.features);
+            const matches = allFeatures.filter(f => f.properties.distributor === "Western Power");
+            if (matches.length) {
+                const fc = { type: 'FeatureCollection', features: matches };
+                const layer = L.geoJSON(fc, {
+                    style: { color: "#2980b9", weight: 2, fillColor: "#2980b9", fillOpacity: 0.35 }
+                }).addTo(map);
+                map.fitBounds(layer.getBounds());
+            } else {
+                map.setView([-25.5, 134], 4);
+            }
+        }).catch(() => map.setView([-25.5, 134], 4));
+    </script>
+</body>
+
+</html>
