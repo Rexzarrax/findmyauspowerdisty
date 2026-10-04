@@ -1,1 +1,4 @@
-User-agent: * Disallow: 
+User-agent: *
+Disallow:
+
+Sitemap: https://findmyauspowerdisty.com/sitemap.xml
