@@ -63,6 +63,7 @@
 
         .legend { display: flex; flex-wrap: wrap; gap: 5px 12px; justify-content: center; margin: 10px 0; font-size: 0.78em; max-width: 1100px; margin-left: auto; margin-right: auto; padding: 0 14px; }
         .legend span.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+        .legend a:hover { text-decoration: underline !important; }
         .disclaimer { text-align: center; font-size: 0.78em; color: #666; margin: 8px 14px 0; }
     </style>
 </head>
@@ -132,6 +133,26 @@
         let marker = null;
         const legendDiv = document.getElementById('legend');
 
+        // Maps each distributor to its coverage-area page (suburb list + outage link)
+        const DIST_PAGE_SLUGS = {
+            'Ausgrid': 'ausgrid',
+            'Endeavour Energy': 'endeavour-energy',
+            'Essential Energy': 'essential-energy',
+            'Evoenergy': 'evoenergy',
+            'Jemena Electricity Networks': 'jemena-electricity-networks',
+            'CitiPower': 'citipower',
+            'Powercor Australia': 'powercor-australia',
+            'United Energy': 'united-energy',
+            'AusNet Services': 'ausnet-services',
+            'Energex': 'energex',
+            'Ergon Energy': 'ergon-energy',
+            'SA Power Networks': 'sa-power-networks',
+            'Western Power': 'western-power',
+            'Horizon Power': 'horizon-power',
+            'Power and Water Corporation': 'power-and-water-corporation',
+            'TasNetworks': 'tasnetworks'
+        };
+
         function defaultStyle(feature) {
             return { color: feature.properties.color, weight: 1.5, fillColor: feature.properties.color, fillOpacity: 0.35 };
         }
@@ -162,7 +183,14 @@
                     const name = f.properties.distributor;
                     if (seen.has(name)) return;
                     seen.add(name);
-                    const item = document.createElement('span');
+                    const slug = DIST_PAGE_SLUGS[name];
+                    const item = document.createElement(slug ? 'a' : 'span');
+                    if (slug) {
+                        item.href = `distributors/${slug}.html`;
+                        item.title = `View ${name} coverage area & outage link`;
+                        item.style.color = 'inherit';
+                        item.style.textDecoration = 'none';
+                    }
                     item.innerHTML = `<span class="swatch" style="background:${f.properties.color}"></span>${name}`;
                     legendDiv.appendChild(item);
                 });
