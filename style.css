@@ -4,10 +4,18 @@
     padding: 10px 20px;
     margin: 0 0 10px 0;
     display: flex;
+    flex-wrap: wrap;           /* add this */
     align-items: center;
     justify-content: center;
     gap: 10px;
-  }
+}
+
+#tagline {
+    flex-basis: 100%;          /* forces it onto its own line */
+    margin: 2px 0 0;
+    font-size: 0.9rem;
+    color: #444;
+}
 
 
   .row:after {
